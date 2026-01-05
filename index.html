@@ -100,7 +100,7 @@
         <section id="hero" class="pt-10 grid md:grid-cols-3 gap-8 items-center bg-white p-6 md:p-12 rounded-2xl shadow-xl border-t-8 border-corporate-accent">
             <div class="md:col-span-1 flex justify-center">
                 <div class="w-full max-w-xs md:max-w-full aspect-square bg-gray-200 rounded-full overflow-hidden shadow-2xl border-4 border-ntust-blue/50">
-                    <img src="images/cathy.jpeg" alt="Professor Cathy Weng" class="w-full h-full object-cover">
+                    <img src="https://placehold.co/640x640/004B87/FFFFFF?text=Dr.+Cathy+Weng%0AHeadshot" alt="Professor Cathy Weng" class="w-full h-full object-cover">
                 </div>
             </div>
             <div class="md:col-span-2 text-center md:text-left">
@@ -130,16 +130,16 @@
         <section id="collaboration" class="scroll-mt-24">
             <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="International Collaborations" data-lang-zh="國際交流合作">International Collaborations</h2>
             <div id="collab-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Injected via Script -->
+                <!-- Script Injected -->
             </div>
         </section>
 
-        <!-- 4. CORE RESEARCH THEMES (INTERACTIVE) -->
+        <!-- 4. CORE RESEARCH THEMES -->
         <section id="research-focus" class="scroll-mt-24">
             <h2 class="text-4xl font-bold text-center text-ntust-blue mb-4 border-b-2 border-corporate-accent pb-2" data-lang-en="Core Research Themes" data-lang-zh="核心研究主題">Core Research Themes</h2>
             <p class="text-center text-gray-500 mb-12 text-sm italic" data-lang-en="Click a theme to explore the details." data-lang-zh="點擊主題即可查看詳細說明。">Click a theme to explore the details.</p>
             <div id="research-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Data injected via Script -->
+                <!-- Script Injected -->
             </div>
         </section>
 
@@ -169,7 +169,7 @@
             </div>
         </section>
 
-        <!-- 6. SELECTED PRESENTATIONS (WITH NAMES) -->
+        <!-- 6. SELECTED PRESENTATIONS -->
         <section id="selected-presentations" class="scroll-mt-24">
             <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="Selected Presentations" data-lang-zh="精選國際專題發表">Selected Presentations</h2>
             <div id="selected-pres-list" class="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
@@ -177,10 +177,15 @@
             </div>
         </section>
 
-        <!-- 7. PUBLICATIONS & CONFERENCES -->
+        <!-- 7. PUBLICATIONS & CONFERENCES (WITH SEARCH) -->
         <section id="publications" class="scroll-mt-24">
             <h2 class="text-4xl font-bold text-center text-ntust-blue mb-8 border-b-2 border-corporate-accent pb-2" data-lang-en="Research Record" data-lang-zh="學術著作與研討發表">Research Record</h2>
             
+            <div class="max-w-xl mx-auto mb-8 relative">
+                <input type="text" id="record-search" class="w-full pl-12 pr-4 py-3 bg-white border border-gray-200 rounded-2xl shadow-sm focus:ring-2 focus:ring-ntust-blue outline-none transition-all" placeholder="Search by keyword, year, or collaborator...">
+                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5"></i>
+            </div>
+
             <div class="flex justify-center mb-8">
                 <div class="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-sm">
                     <button id="btn-journals" class="px-6 py-2 rounded-md bg-ntust-blue text-white text-xs font-bold transition-all shadow-md">Journal Publications</button>
@@ -191,6 +196,7 @@
             <div class="max-w-5xl mx-auto h-[700px] overflow-y-auto pr-6 border-t border-b border-gray-100 py-8">
                 <div id="pub-list" class="space-y-6"></div>
                 <div id="conf-list" class="space-y-4 hidden"></div>
+                <div id="no-results" class="hidden text-center py-20 text-gray-400 italic">No matching records found.</div>
             </div>
         </section>
 
@@ -229,7 +235,6 @@
         <section id="academic-journey" class="scroll-mt-24">
             <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="Academic Journey & Education" data-lang-zh="學術歷程與教育背景">Academic Journey & Education</h2>
             <div class="grid lg:grid-cols-3 gap-8 mb-12">
-                <!-- Education -->
                 <div class="lg:col-span-1 space-y-6">
                     <h3 class="text-2xl font-bold text-corporate-accent border-l-4 border-corporate-accent pl-4" data-lang-en="Education" data-lang-zh="學歷背景">Education</h3>
                     <div class="bg-white p-6 rounded-xl shadow-lg border-t-8 border-ntust-blue">
@@ -247,7 +252,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Journey -->
                 <div class="lg:col-span-2">
                     <h3 class="text-2xl font-bold text-ntust-blue border-l-4 border-ntust-blue pl-4 mb-8" data-lang-en="Professional Career" data-lang-zh="專業經歷">Professional Career</h3>
                     <div id="journey-list" class="relative timeline-container space-y-8"></div>
@@ -343,7 +347,6 @@
             { en: 'NSTC: Math E-book App R&D (2012-14)', zh: '科技部手持式數學互動電子繪本 App 之研發與評估 (2012-14)', tag: 'NSTC' }
         ];
 
-        // DETAILED RESEARCH RECORD
         const journalPublications = [
             { year: '2025', en: 'Astatke, M., Weng, C., & Yohannes, A. (2025). What is the role of immersive virtual reality (IVR) in the development of creativity skills and engagement among students in STREAM-based learning?', zh: 'Astatke, M., 翁楊絲茜, 等 (2025)。沉浸式虛擬實境 (IVR) 於 STREAM 學習中對學生創造力與參與度之影響。', journal: 'Education and Information Technologies (SSCI)' },
             { year: '2025', en: 'Weng, C., & Wirda, M. A. (2025). The effect of student\'s online learning readiness to student\'s engagement, satisfaction and achievement in higher education, Indonesia.', zh: '翁楊絲茜, & Wirda, M. A. (2025)。印尼高等教育中線上學習準備度對參與度與成就之影響。', journal: 'Education and Information Technologies (SSCI)' },
@@ -370,10 +373,9 @@
             { year: '2015', place: 'Kobe, Japan', en: 'ACTC: Effects of an Interactive E-Storybook on Young Children’s Reading Comprehension.', zh: 'ACTC：互動式電子繪本對幼兒閱讀理解之影響。' }
         ];
 
-        // ADDED MISSING NAMES IN SELECTED PRESENTATIONS
         const selectedPresentations = [
             { year: '2025', en: 'Upcoming Milestone: AI-enabled Social Emotional Learning (SEL) Pedagogy.', zh: '2025 重點發表：人工智慧賦能之社會情緒學習 (SEL) 教學法。', place: 'International Academic Venues', highlight: 'Most Recent', names: 'Weng, C., & Research Team' },
-            { year: '2024', en: 'Scratch Animation for SDGs with AI-comics: Impact on Empathy and Self-efficacy.', zh: '2024 亮點：結合 AI 漫畫之 Scratch SDGs 動畫教學對學生同理心之影響。', place: 'SSCI Journal Highlight', highlight: 'High Impact', names: 'Weng, C., Kassaw Kimanzi, K., Tsai, P. S., & Lee, T. J.' },
+            { year: '2024', en: 'Scratch Animation for SDGs with AI-comics: Impact on Empathy and Self-efficacy.', zh: '2024 亮點：結合 AI 漫畫之 Scratch SDGs 動畫教學對學生同理心之影響向。', place: 'SSCI Journal Highlight', highlight: 'High Impact', names: 'Weng, C., Kassaw Kimanzi, K., Tsai, P. S., & Lee, T. J.' },
             { year: '2013', en: 'HCI International: The Development of Interactive Book Apps to Teach Mathematical Concepts.', zh: 'HCI International：開發互動式 App 以教導幼兒數學概念之成效。', place: 'Las Vegas, USA', highlight: 'Classic Record', names: 'Weng, C., & Weng, A.' },
             { year: '2013', en: 'TELDAP: Social Media for Teaching English Vocabulary: A Case Study on Facebook.', zh: 'TELDAP：運用社群媒體進行英語詞彙教學之個案研究。', place: 'Hsinchu, Taiwan', highlight: 'Case Study', names: 'Weng, C., Liao, Y. R., & Weng, A.' },
             { year: '2013', en: 'TWELF: Lego Robotics Engagement in Programming Curriculum成效評估。', zh: 'TWELF：應用樂高機器人對於程式設計學習之課程成效評估。', place: 'Taichung, Taiwan', highlight: 'Innovation', names: '王湄雁、翁楊絲茜、夏至賢' },
@@ -387,6 +389,51 @@
             { date: '2009 - 2016', en: 'Director, Center of Gender Studies, NTUST', zh: '性別研究中心 主任', hl: true, icon: 'heart' },
             { date: '2002 - 2015', en: 'Assistant Professor, NTUST', zh: '數位學習與教育研究所 助理教授', hl: false, icon: 'book' }
         ];
+
+        let activeTab = 'journals';
+
+        function filterAndRenderRecord() {
+            const query = document.getElementById('record-search').value.toLowerCase();
+            const data = activeTab === 'journals' ? journalPublications : conferencePresentations;
+            const filtered = data.filter(item => 
+                item.en.toLowerCase().includes(query) || 
+                item.zh.toLowerCase().includes(query) || 
+                item.year.includes(query) ||
+                (item.journal && item.journal.toLowerCase().includes(query)) ||
+                (item.place && item.place.toLowerCase().includes(query))
+            );
+
+            const container = activeTab === 'journals' ? document.getElementById('pub-list') : document.getElementById('conf-list');
+            const otherContainer = activeTab === 'journals' ? document.getElementById('conf-list') : document.getElementById('pub-list');
+            
+            container.classList.remove('hidden');
+            otherContainer.classList.add('hidden');
+
+            if (filtered.length === 0) {
+                document.getElementById('no-results').classList.remove('hidden');
+                container.innerHTML = '';
+            } else {
+                document.getElementById('no-results').classList.add('hidden');
+                container.innerHTML = filtered.map(p => {
+                    if (activeTab === 'journals') {
+                        return `
+                            <div class="bg-white p-6 rounded-xl shadow border-l-4 border-ntust-blue relative hover:shadow-md transition-shadow group">
+                                <div class="absolute top-0 right-0 p-2 bg-gray-50 text-[10px] font-black text-gray-300">${p.year}</div>
+                                <p class="text-gray-800 leading-relaxed mb-1 text-sm md:text-base font-medium pr-12" data-lang-en="${p.en}" data-lang-zh="${p.zh}"></p>
+                                <p class="text-xs text-corporate-accent font-bold italic">${p.journal}</p>
+                            </div>`;
+                    } else {
+                        return `
+                            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:shadow-md transition-shadow">
+                                <div class="md:w-32 shrink-0"><span class="text-xs font-black text-gray-400">${p.year}</span></div>
+                                <div class="flex-grow pr-4 text-xs font-bold text-gray-700" data-lang-en="${p.en}" data-lang-zh="${p.zh}"></div>
+                                <div class="md:w-40 text-right"><span class="text-[10px] px-2 py-1 bg-blue-50 rounded text-ntust-blue font-black uppercase tracking-tight">${p.place}</span></div>
+                            </div>`;
+                    }
+                }).join('');
+            }
+            updateLang();
+        }
 
         function render() {
             // Collaboration Grid
@@ -433,24 +480,6 @@
                 </div>
             `).join('');
 
-            // Publications Render
-            document.getElementById('pub-list').innerHTML = journalPublications.map(p => `
-                <div class="bg-white p-6 rounded-xl shadow border-l-4 border-ntust-blue relative hover:shadow-md transition-shadow group">
-                    <div class="absolute top-0 right-0 p-2 bg-gray-50 text-[10px] font-black text-gray-300">${p.year}</div>
-                    <p class="text-gray-800 leading-relaxed mb-1 text-sm md:text-base font-medium pr-12" data-lang-en="${p.en}" data-lang-zh="${p.zh}"></p>
-                    <p class="text-xs text-corporate-accent font-bold italic">${p.journal}</p>
-                </div>
-            `).join('');
-
-            // Conferences Render
-            document.getElementById('conf-list').innerHTML = conferencePresentations.map(c => `
-                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:shadow-md transition-shadow">
-                    <div class="md:w-32 shrink-0"><span class="text-xs font-black text-gray-400">${c.year}</span></div>
-                    <div class="flex-grow pr-4 text-xs font-bold text-gray-700" data-lang-en="${c.en}" data-lang-zh="${c.zh}"></div>
-                    <div class="md:w-40 text-right"><span class="text-[10px] px-2 py-1 bg-blue-50 rounded text-ntust-blue font-black uppercase tracking-tight">${c.place}</span></div>
-                </div>
-            `).join('');
-
             // Selected Presentations Render (WITH NAMES)
             document.getElementById('selected-pres-list').innerHTML = selectedPresentations.map(s => `
                 <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-accent hover:scale-105 transition-transform">
@@ -479,8 +508,8 @@
                 </div>
             `).join('');
 
+            filterAndRenderRecord();
             if (typeof lucide !== 'undefined') { lucide.createIcons(); }
-            updateLang();
         }
 
         window.toggleTheme = function(index) {
@@ -491,18 +520,20 @@
         }
 
         document.getElementById('btn-journals').addEventListener('click', () => {
-            document.getElementById('pub-list').classList.remove('hidden');
-            document.getElementById('conf-list').classList.add('hidden');
+            activeTab = 'journals';
             document.getElementById('btn-journals').className = 'px-6 py-2 rounded-md bg-ntust-blue text-white text-xs font-bold transition-all shadow-md';
             document.getElementById('btn-conferences').className = 'px-6 py-2 rounded-md text-gray-500 hover:text-ntust-blue text-xs font-bold transition-all';
+            filterAndRenderRecord();
         });
 
         document.getElementById('btn-conferences').addEventListener('click', () => {
-            document.getElementById('pub-list').classList.add('hidden');
-            document.getElementById('conf-list').classList.remove('hidden');
+            activeTab = 'conferences';
             document.getElementById('btn-conferences').className = 'px-6 py-2 rounded-md bg-ntust-blue text-white text-xs font-bold transition-all shadow-md';
             document.getElementById('btn-journals').className = 'px-6 py-2 rounded-md text-gray-500 hover:text-ntust-blue text-xs font-bold transition-all';
+            filterAndRenderRecord();
         });
+
+        document.getElementById('record-search').addEventListener('input', filterAndRenderRecord);
 
         function updateLang() {
             const isEn = currentLang === 'en';
