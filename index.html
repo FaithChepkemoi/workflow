@@ -6,79 +6,52 @@
     <title>Professor Cathy Weng | Research Portfolio</title>
     <!-- Load Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons for aesthetic and research themes -->
-    <script type="module">
-        import { createIcons, icons } from 'https://unpkg.com/lucide@latest';
-        window.addEventListener('load', () => createIcons({ icons }));
-    </script>
+    <!-- Load Lucide Icons via UMD build -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Custom Font Setup: Microsoft JhengHei for Chinese, Arial/Helvetica for English */
-        .font-chinese {
-            font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif;
-        }
-        .font-english {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        /* Custom scrollbar for better aesthetics - Using Primary Blue for scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #004B87; /* NTUST Blue (Primary) */
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #003a68;
-        }
+        .font-chinese { font-family: 'Microsoft JhengHei', '微軟正黑體', Arial, sans-serif; }
+        .font-english { font-family: Arial, Helvetica, sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #004B87; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #003a68; }
 
-        /* Responsive Timeline Styling */
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 2px;
-            height: 100%;
-            background: #e5e7eb;
-        }
         @media (min-width: 768px) {
-            .timeline-item {
-                display: flex;
-                align-items: flex-start;
-                padding-left: 2rem;
-            }
-            .timeline-item:nth-child(even) {
-                flex-direction: row-reverse;
-                padding-left: 0;
-                padding-right: 2rem;
-            }
-            .timeline-item-content {
-                width: 50%;
-                padding: 0 1.5rem;
-            }
-            .timeline-item-dot {
-                position: absolute;
-                top: 0;
-                left: -6px; /* Adjust for dot size */
-            }
-            .timeline-item:nth-child(even) .timeline-item-dot {
-                left: auto;
-                right: -6px;
-            }
             .timeline-container::before {
-                left: 50%;
-                transform: translateX(-50%);
+                content: '';
+                position: absolute; left: 50%; top: 0; bottom: 0;
+                width: 2px; background: #e5e7eb; transform: translateX(-50%);
             }
-            .timeline-item::before {
-                display: none;
+            .timeline-item {
+                display: flex; align-items: flex-start; justify-content: space-between;
+                width: 100%; margin-bottom: 2rem;
+            }
+            .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+            .timeline-item-content { width: 45%; }
+            .timeline-item-icon {
+                position: absolute; left: 50%; transform: translateX(-50%);
+                background: white; z-index: 10;
             }
         }
-        /* Smooth scrolling for anchor links */
-        html {
-            scroll-behavior: smooth;
+        html { scroll-behavior: smooth; }
+
+        /* Animation for Research Themes */
+        .theme-card-desc {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .theme-card.active .theme-card-desc {
+            max-height: 250px;
+            opacity: 1;
+            margin-top: 1rem;
+        }
+        .theme-card.active .chevron-icon {
+            transform: rotate(180deg);
+        }
+        .chevron-icon {
+            transition: transform 0.3s ease;
         }
     </style>
     <script>
@@ -86,17 +59,10 @@
             theme: {
                 extend: {
                     colors: {
-                        // Core NTUST Blue (Primary Color)
                         'ntust-blue': '#004B87',
-                        // New Corporate Accent (Replacing Red and Gold for a clean look)
-                        'corporate-accent': '#0ea5e9', // Tailwind Sky 500 equivalent
-
+                        'corporate-accent': '#0ea5e9',
                         'primary': '#004B87',
                         'accent': '#0ea5e9',
-                        
-                        // Red and Gold kept as variables but are de-emphasized
-                        'ntust-red-unused': '#C1272D',
-                        'ntust-gold-unused': '#B8860B',
                     },
                     fontFamily: {
                         sans: ['Arial', 'Helvetica', 'sans-serif'],
@@ -109,569 +75,222 @@
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased font-english">
 
-    <!-- Language Toggle and Sticky Header with Navigation -->
+    <!-- Header -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-lg transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center">
-            <a href="#hero" class="text-xl font-bold text-ntust-blue hover:text-corporate-accent transition-colors duration-300">Cathy Weng / 翁楊絲茜 </a>
-            <!-- UPDATED: Navigation links -->
-            <nav class="hidden md:flex space-x-6 text-sm font-bold">
-                <a href="#about" class="text-ntust-blue hover:text-corporate-accent border-b-2 border-transparent hover:border-corporate-accent pb-1 transition-all duration-200" data-lang-en="About" data-lang-zh="關於我">About</a>
-                <a href="#research-focus" class="text-ntust-blue hover:text-corporate-accent border-b-2 border-transparent hover:border-corporate-accent pb-1 transition-all duration-200" data-lang-en="Research" data-lang-zh="研究主題">Research</a>
-                <a href="#projects-initiatives" class="text-ntust-blue hover:text-corporate-accent border-b-2 border-transparent hover:border-corporate-accent pb-1 transition-all duration-200" data-lang-en="Projects" data-lang-zh="專案計畫">Projects</a>
-                <a href="#gallery" class="text-ntust-blue hover:text-corporate-accent border-b-2 border-transparent hover:border-corporate-accent pb-1 transition-all duration-200" data-lang-en="Gallery" data-lang-zh="相簿">Gallery</a>
-                <a href="#publications" class="text-ntust-blue hover:text-corporate-accent border-b-2 border-transparent hover:border-corporate-accent pb-1 transition-all duration-200" data-lang-en="Publications" data-lang-zh="出版物">Publications</a>
-                <a href="#conference-activities" class="text-ntust-blue hover:text-corporate-accent border-b-2 border-transparent hover:border-corporate-accent pb-1 transition-all duration-200" data-lang-en="Conferences" data-lang-zh="會議活動">Conferences</a>
-                <a href="#academic-journey" class="text-ntust-blue hover:text-corporate-accent border-b-2 border-transparent hover:border-corporate-accent pb-1 transition-all duration-200" data-lang-en="Journey" data-lang-zh="學術歷程">Journey</a>
-                <a href="#contact" class="text-ntust-blue hover:text-corporate-accent border-b-2 border-transparent hover:border-corporate-accent pb-1 transition-all duration-200" data-lang-en="Contact" data-lang-zh="聯繫方式">Contact</a>
+            <a href="#hero" class="text-xl font-bold text-ntust-blue hover:text-corporate-accent transition-colors">Cathy Weng / 翁士千</a>
+            <nav class="hidden lg:flex space-x-5 text-xs font-bold uppercase tracking-wider">
+                <a href="#about" class="text-ntust-blue hover:text-corporate-accent pb-1 transition-all" data-lang-en="About" data-lang-zh="關於我">About</a>
+                <a href="#collaboration" class="text-ntust-blue hover:text-corporate-accent pb-1 transition-all" data-lang-en="Global" data-lang-zh="國際合作">Global</a>
+                <a href="#research-focus" class="text-ntust-blue hover:text-corporate-accent pb-1 transition-all" data-lang-en="Themes" data-lang-zh="研究主題">Themes</a>
+                <a href="#projects-initiatives" class="text-ntust-blue hover:text-corporate-accent pb-1 transition-all" data-lang-en="Projects" data-lang-zh="專案計畫">Projects</a>
+                <a href="#publications" class="text-ntust-blue hover:text-corporate-accent pb-1 transition-all" data-lang-en="Publications" data-lang-zh="學術著作">Publications</a>
+                <a href="#academic-journey" class="text-ntust-blue hover:text-corporate-accent pb-1 transition-all" data-lang-en="Journey" data-lang-zh="學術歷程">Journey</a>
+                <a href="#contact" class="text-ntust-blue hover:text-corporate-accent pb-1 transition-all" data-lang-en="Contact" data-lang-zh="聯繫方式">Contact</a>
             </nav>
-            <div class="flex items-center space-x-4 mt-2 md:mt-0">
-                <button id="lang-toggle" class="px-3 py-1 bg-ntust-blue text-white text-sm font-medium rounded-full hover:bg-corporate-accent transition-colors duration-300 shadow-md">
-                    繁體中文
-                </button>
+            <div class="flex items-center gap-3">
+                <button id="lang-toggle" class="px-4 py-1 bg-ntust-blue text-white text-xs font-bold rounded-full hover:bg-corporate-accent transition-colors shadow-md">繁體中文</button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-20">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-24">
 
-        <!-- 1. HERO SECTION (Split Layout) -->
+        <!-- 1. HERO SECTION -->
         <section id="hero" class="pt-10 grid md:grid-cols-3 gap-8 items-center bg-white p-6 md:p-12 rounded-2xl shadow-xl border-t-8 border-corporate-accent">
-            <!-- Left: Photo Placeholder -->
             <div class="md:col-span-1 flex justify-center">
                 <div class="w-full max-w-xs md:max-w-full aspect-square bg-gray-200 rounded-full overflow-hidden shadow-2xl border-4 border-ntust-blue/50">
-                    <img src="images/cathy.jpeg" alt="Professional Headshot Placeholder" class="w-full h-full object-cover opacity-70">
-                    <!-- Placeholder: Replace src with actual professional headshot (640x640px) -->
+                    <img src="images/cathy.jpeg" alt="Professor Cathy Weng" class="w-full h-full object-cover">
                 </div>
             </div>
-
-            <!-- Right: Introduction -->
             <div class="md:col-span-2 text-center md:text-left">
-                <h1 class="text-5xl md:text-7xl font-extrabold text-ntust-blue mb-2 transition-all duration-500" data-lang-en="Professor Cathy Weng" data-lang-zh="翁楊絲茜 教授">Professor Cathy Weng</h1>
-                <h2 class="text-2xl md:text-3xl text-corporate-accent mb-4" data-lang-en="Ph.D., National Taiwan University of Science and Technology (NTUST)" data-lang-zh="國立臺灣科技大學 師資培育中心 / 數位學習與教育研究所">Ph.D., NTUST</h2>
-                <p class="text-xl text-gray-600 italic mb-6 border-l-4 border-corporate-accent pl-4 transition-all duration-500"
-                   data-lang-en="Tagline: Pioneering the convergence of AI, social digital literacy, and cross-cultural education."
-                   data-lang-zh="融合人工智慧、社會數位素養與跨文化教育的引領者">
-                    Tagline: Pioneering the convergence of AI, social digital literacy, and cross-cultural education.
-                </p>
-
-                <!-- Quick Contact Info -->
-                <div class="space-y-2 text-lg">
-                    <p class="flex items-center justify-center md:justify-start">
-                        <i data-lucide="mail" class="w-5 h-5 mr-3 text-ntust-blue"></i>
-                        <span data-lang-en="Email:" data-lang-zh="電子郵件：">Email:</span>
-                        <a href="mailto:cathyhaien@hotmail.com" class="ml-2 hover:text-corporate-accent transition-colors duration-300">cathyhaien@hotmail.com</a>
-                    </p>
-                    <p class="flex items-center justify-center md:justify-start">
-                        <i data-lucide="phone" class="w-5 h-5 mr-3 text-ntust-blue"></i>
-                        <span data-lang-en="Mobile:" data-lang-zh="手機：">Mobile:</span>
-                        <a href="tel:+886-918-333-336" class="ml-2 hover:text-corporate-accent transition-colors duration-300">+886-918-333-336</a>
-                    </p>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-ntust-blue mb-2" data-lang-en="Professor Cathy Weng" data-lang-zh="翁士千 教授">Professor Cathy Weng</h1>
+                <h2 class="text-xl md:text-2xl text-corporate-accent font-semibold mb-4 leading-snug" data-lang-en="National Taiwan University of Science and Technology (NTUST)" data-lang-zh="國立臺灣科技大學 師資培育中心 / 數位學習與教育研究所">NTUST</h2>
+                <p class="text-xl text-gray-600 italic mb-6 border-l-4 border-corporate-accent pl-4" data-lang-en="Pioneering the convergence of AI, social digital literacy, and cross-cultural education." data-lang-zh="融合人工智慧、社會數位素養與跨文化教育的先驅者。">Pioneering the convergence of AI, social digital literacy, and cross-cultural education.</p>
+                <div class="flex flex-col md:flex-row gap-6 text-md font-medium mb-6">
+                    <span class="flex items-center"><i data-lucide="mail" class="w-5 h-5 mr-2 text-ntust-blue"></i>cathyhaien@hotmail.com</span>
+                    <span class="flex items-center"><i data-lucide="phone" class="w-5 h-5 mr-2 text-ntust-blue"></i>+886-918-333-336</span>
                 </div>
+                <a href="#" class="inline-flex items-center px-6 py-3 bg-ntust-blue text-white rounded-lg font-bold hover:bg-corporate-accent transition-all shadow-lg transform hover:-translate-y-1">
+                    <i data-lucide="download" class="w-5 h-5 mr-2"></i> <span data-lang-en="Download Full CV" data-lang-zh="下載完整簡歷">Download Full CV</span>
+                </a>
             </div>
         </section>
-        
-        <!-- 2. ABOUT SECTION (Consolidating Collaborations and Teaching Philosophy) -->
-        <section id="about" class="pt-10">
-            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2"
-                data-lang-en="About Me & International Impact"
-                data-lang-zh="關於我與國際影響力">
-                About Me & International Impact
-            </h2>
 
-            <!-- TEACHING PHILOSOPHY -->
-            <div id="teaching-philosophy" class="bg-ntust-blue/5 p-12 rounded-2xl shadow-inner mb-16">
-                <h3 class="text-4xl font-bold text-center text-ntust-blue mb-8"
-                    data-lang-en="Teaching & Mentoring Philosophy"
-                    data-lang-zh="教學與指導理念">
-                    Teaching & Mentoring Philosophy
-                </h3>
-                <blockquote class="text-xl italic text-gray-700 max-w-4xl mx-auto border-l-4 border-corporate-accent pl-6">
-                    <p class="mb-4" data-lang-en="My philosophy centers on creating a student-centered, technology-enabled learning environment where digital tools are instruments for critical thinking and cultural understanding, not just consumption. I mentor future educators to be adaptive, ethical, and globally-minded innovators." data-lang-zh="我的理念以創建一個以學生為中心、技術賦能的學習環境為核心，讓數位工具成為批判性思維和文化理解的工具，而非僅僅是用於消費。我指導未來的教育工作者成為適應性強、道德高尚、具有全球視野的創新者。">
-                        My philosophy centers on creating a student-centered, technology-enabled learning environment where digital tools are instruments for critical thinking and cultural understanding, not just consumption. I mentor future educators to be adaptive, ethical, and globally-minded innovators.
-                    </p>
-                    <footer class="text-base font-semibold text-ntust-blue" data-lang-en="— Prof. Cathy Weng" data-lang-zh="— 翁楊絲茜 教授">— Prof. Cathy Weng</footer>
-                </blockquote>
+        <!-- 2. PROFILE & PHILOSOPHY -->
+        <section id="about" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="Profile & Philosophy" data-lang-zh="個人簡介與理念">Profile & Philosophy</h2>
+            <div class="max-w-4xl mx-auto bg-white p-10 rounded-2xl shadow-lg border-l-8 border-ntust-blue">
+                <h3 class="text-2xl font-bold text-ntust-blue mb-6 flex items-center"><i data-lucide="lightbulb" class="w-6 h-6 mr-3 text-corporate-accent"></i><span data-lang-en="Teaching Philosophy" data-lang-zh="教育理念">Teaching Philosophy</span></h3>
+                <p class="text-gray-700 italic leading-relaxed text-xl" data-lang-en="My philosophy centers on a student-centered, technology-enabled environment. I mentor future educators to be adaptive, ethical, and globally-minded innovators." data-lang-zh="我的教育理念以學生為中心及科技賦能的環境為核心。我指導未來的教育工作者成為具備適應力、倫理觀與全球視野的創新者。">My philosophy centers on a student-centered, technology-enabled environment.</p>
             </div>
+        </section>
 
-            <!-- INTERNATIONAL COLLABORATIONS -->
-            <h3 class="text-3xl font-semibold text-corporate-accent mb-6" data-lang-en="International Collaborations" data-lang-zh="國際合作">International Collaborations</h3>
+        <!-- 3. INTERNATIONAL COLLABORATIONS -->
+        <section id="collaboration" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="International Collaborations" data-lang-zh="國際交流合作">International Collaborations</h2>
+            <div id="collab-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Injected via Script -->
+            </div>
+        </section>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Collaboration Card 1: Vietnam -->
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-ntust-blue hover:shadow-xl transition-shadow duration-300">
-                    <i data-lucide="map-pin" class="w-8 h-8 text-corporate-accent mb-3"></i>
-                    <h3 class="text-2xl font-semibold text-ntust-blue mb-2" data-lang-en="Vietnam" data-lang-zh="越南">Vietnam</h3>
-                    <p data-lang-en="Digital intercultural learning, AI in language education, and social-emotional skills development." data-lang-zh="數位跨文化學習、人工智慧在語言教育中的應用，以及社交情緒技能發展。">
-                        Digital intercultural learning, AI in language education, and social-emotional skills development.
-                    </p>
+        <!-- 4. CORE RESEARCH THEMES (INTERACTIVE) -->
+        <section id="research-focus" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-4 border-b-2 border-corporate-accent pb-2" data-lang-en="Core Research Themes" data-lang-zh="核心研究主題">Core Research Themes</h2>
+            <p class="text-center text-gray-500 mb-12 text-sm italic" data-lang-en="Click a theme to explore the details." data-lang-zh="點擊主題即可查看詳細說明。">Click a theme to explore the details.</p>
+            <div id="research-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Data injected via Script -->
+            </div>
+        </section>
+
+        <!-- 5. PROJECTS & INITIATIVES -->
+        <section id="projects-initiatives" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="Projects & Initiatives" data-lang-zh="專案計畫與社會責任">Projects & Initiatives</h2>
+            <div class="grid lg:grid-cols-4 gap-8">
+                <div class="lg:col-span-1 space-y-6">
+                    <h3 class="text-2xl font-bold text-corporate-accent border-l-4 border-corporate-accent pl-4" data-lang-en="Upcoming & Key" data-lang-zh="近期規劃與重點">Upcoming & Key</h3>
+                    <div class="bg-white p-5 rounded-xl shadow-md border-t-4 border-accent">
+                        <h4 class="font-bold text-ntust-blue" data-lang-en="Social Emotional Learning (SEL)" data-lang-zh="社會情緒學習 (SEL)">Social Emotional Learning (SEL)</h4>
+                        <p class="text-xs text-gray-600 mt-2" data-lang-en="Integrating SEL into digital literacy and AI education for holistic student development." data-lang-zh="將社會情緒學習融入數位素養與人工智慧教育，促進學生全人發展。"></p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-md border-t-4 border-ntust-blue">
+                        <h4 class="font-bold text-ntust-blue" data-lang-en="Mental Health & SDG 3" data-lang-zh="心理健康與 SDG 3">Mental Health & SDG 3</h4>
+                        <p class="text-xs text-gray-600 mt-2" data-lang-en="Planning training to promote health and well-being via digital platforms." data-lang-zh="規劃舉辦健康與福祉培訓計畫。"></p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-md border-t-4 border-ntust-blue">
+                        <h4 class="font-bold text-ntust-blue" data-lang-en="Mandarin Training" data-lang-zh="華語文課程">Mandarin Training</h4>
+                        <p class="text-xs text-gray-600 mt-2" data-lang-en="Building specialized curriculum for teacher-education training." data-lang-zh="建構培訓專用的華語教學課程。"></p>
+                    </div>
                 </div>
-                <!-- Collaboration Card 2: Ethiopia -->
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-ntust-blue hover:shadow-xl transition-shadow duration-300">
-                    <i data-lucide="map-pin" class="w-8 h-8 text-corporate-accent mb-3"></i>
-                    <h3 class="text-2xl font-semibold text-ntust-blue mb-2" data-lang-en="Ethiopia" data-lang-zh="衣索比亞">Ethiopia</h3>
-                    <p data-lang-en="Immersive VR-based STREAM education and research on Wireless Sensor Networks (WSN) in smart classrooms." data-lang-zh="沉浸式VR-based STREAM教育，以及智慧教室中無線感測器網絡（WSN）的研究。">
-                        Immersive VR-based STREAM education and research on Wireless Sensor Networks (WSN) in smart classrooms.
-                    </p>
-                </div>
-                <!-- Collaboration Card 3: Japan -->
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-ntust-blue hover:shadow-xl transition-shadow duration-300">
-                    <i data-lucide="map-pin" class="w-8 h-8 text-corporate-accent mb-3"></i>
-                    <h3 class="text-2xl font-semibold text-ntust-blue mb-2" data-lang-en="Japan" data-lang-zh="日本">Japan</h3>
-                    <p data-lang-en="Integrating AR/VR into Vocational Education and promoting identity and well-being through AI-Enhanced Life Reviews." data-lang-zh="將AR/VR整合到職業教育中，並透過人工智慧增強的生命回顧促進身份認同和福祉。">
-                        Integrating AR/VR into Vocational Education and promoting identity and well-being through AI-Enhanced Life Reviews.
-                    </p>
-                </div>
-                <!-- Collaboration Card 4: Indonesia -->
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-ntust-blue hover:shadow-xl transition-shadow duration-300">
-                    <i data-lucide="map-pin" class="w-8 h-8 text-corporate-accent mb-3"></i>
-                    <h3 class="text-2xl font-semibold text-ntust-blue mb-2" data-lang-en="Indonesia" data-lang-zh="印尼">Indonesia</h3>
-                    <p data-lang-en="Digital literacy, internet epistemic beliefs, and engagement in interactive learning environments." data-lang-zh="數位素養、網路認知信念以及在互動學習環境中的參與。">
-                        Digital literacy, internet epistemic beliefs, and engagement in interactive learning environments.
-                    </p>
-                </div>
-                <!-- Collaboration Card 5: Kenya -->
-                <div class="bg-white p-6 rounded-xl shadow-md border-t-4 border-ntust-blue hover:shadow-xl transition-shadow duration-300">
-                    <i data-lucide="map-pin" class="w-8 h-8 text-corporate-accent mb-3"></i>
-                    <h3 class="text-2xl font-semibold text-ntust-blue mb-2" data-lang-en="Kenya" data-lang-zh="肯亞">Kenya</h3>
-                    <p data-lang-en="AI-enhanced life reviews focusing on identity, well-being, and purpose in technical and vocational education." data-lang-zh="人工智慧增強的生命回顧，專注於技術和職業教育中的身份、福祉和目標。">
-                        AI-enhanced life reviews focusing on identity, well-being, and purpose in technical and vocational education.
-                    </p>
+                <div class="lg:col-span-3">
+                    <h3 class="text-2xl font-bold text-ntust-blue border-l-4 border-ntust-blue pl-4 mb-6" data-lang-en="Completed Archive" data-lang-zh="完整專案歷程">Completed Archive</h3>
+                    <div id="projects-list" class="grid md:grid-cols-2 gap-4 h-[450px] overflow-y-auto pr-4 border-t border-gray-100 pt-4"></div>
                 </div>
             </div>
         </section>
 
-
-        <!-- 3. RESEARCH FOCUS SECTION (Prominent, with icons) -->
-        <section id="research-focus" class="pt-10">
-            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2"
-                data-lang-en="Core Research Themes"
-                data-lang-zh="核心研究主題">
-                Core Research Themes
-            </h2>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Research Theme Card Component is rendered by JS -->
+        <!-- 6. SELECTED PRESENTATIONS (WITH NAMES) -->
+        <section id="selected-presentations" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="Selected Presentations" data-lang-zh="精選國際專題發表">Selected Presentations</h2>
+            <div id="selected-pres-list" class="grid md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                <!-- Data injected via Script -->
             </div>
         </section>
 
-        <!-- 4. PROJECTS AND INITIATIVES SECTION - REINSTATED VISUAL CARDS -->
-        <section id="projects-initiatives" class="pt-10">
-            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2"
-                data-lang-en="Projects and Initiatives"
-                data-lang-zh="專案與倡議">
-                Projects and Initiatives
-            </h2>
-
-            <!-- Upcoming Projects -->
-            <h3 class="text-3xl font-semibold text-corporate-accent mb-6" data-lang-en="Current & Upcoming Initiatives" data-lang-zh="目前與即將推動的倡議">Current & Upcoming Initiatives</h3>
-            <div class="space-y-4 mb-12">
-                <div class="p-4 bg-white rounded-xl shadow-md border-l-4 border-ntust-blue">
-                    <p class="font-medium flex items-center">
-                        <i data-lucide="heart-handshake" class="w-6 h-6 text-corporate-accent mr-3"></i>
-                        <span data-lang-en="Planning to conduct training on Mental Health to promote SDG Good Health and Well-being." data-lang-zh="規劃舉辦心理健康培訓，以推動永續發展目標「良好健康與福祉」。">Planning to conduct training on Mental Health to promote SDG Good Health and Well-being.</span>
-                    </p>
-                </div>
-                <div class="p-4 bg-white rounded-xl shadow-md border-l-4 border-ntust-blue">
-                    <p class="font-medium flex items-center">
-                        <i data-lucide="hand-heart" class="w-6 h-6 text-corporate-accent mr-3"></i>
-                        <span data-lang-en="Social Emotional Learning (SEL) initiative." data-lang-zh="社會情緒學習（SEL）倡議。">Social Emotional Learning (SEL) initiative.</span>
-                    </p>
-                </div>
-                <div class="p-4 bg-white rounded-xl shadow-md border-l-4 border-ntust-blue">
-                    <p class="font-medium flex items-center">
-                        <i data-lucide="book-open" class="w-6 h-6 text-corporate-accent mr-3"></i>
-                        <span data-lang-en="Building a Mandarin curriculum to be used in the upcoming training." data-lang-zh="正在建構用於未來培訓的華語文課程。">Building a Mandarin curriculum to be used in the upcoming training.</span>
-                    </p>
+        <!-- 7. PUBLICATIONS & CONFERENCES -->
+        <section id="publications" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-8 border-b-2 border-corporate-accent pb-2" data-lang-en="Research Record" data-lang-zh="學術著作與研討發表">Research Record</h2>
+            
+            <div class="flex justify-center mb-8">
+                <div class="inline-flex rounded-lg border border-gray-200 bg-white p-1 shadow-sm">
+                    <button id="btn-journals" class="px-6 py-2 rounded-md bg-ntust-blue text-white text-xs font-bold transition-all shadow-md">Journal Publications</button>
+                    <button id="btn-conferences" class="px-6 py-2 rounded-md text-gray-500 hover:text-ntust-blue text-xs font-bold transition-all">Conference Presentations</button>
                 </div>
             </div>
 
-            <!-- Completed Projects - VISUAL CARDS ARE BACK HERE -->
-            <h3 class="text-3xl font-semibold text-corporate-accent mb-6" data-lang-en="Completed Projects (Key Achievements)" data-lang-zh="已完成專案（主要成就）">Completed Projects (Key Achievements)</h3>
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                <!-- Project 1: Kenya - Study-Buddy Program (SDG Exchange) -->
-                <div class="bg-white rounded-xl shadow-lg border-t-4 border-corporate-accent overflow-hidden">
-                    <img src="https://placehold.co/400x200/004B87/FFFFFF?text=Kenya+Study-Buddy" 
-                         alt="Placeholder image for Study-Buddy Kenya-Taiwan Exchange" 
-                         class="w-full h-40 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-lg font-bold text-ntust-blue mb-2" data-lang-en="Kenya: Study-Buddy SDG Exchange" data-lang-zh="肯亞：學習夥伴永續發展目標交流">Kenya: Study-Buddy SDG Exchange</h4>
-                        <p class="text-gray-600 text-sm" data-lang-en="Facilitated student exchange focused on SDG 4 (Quality Education) and topics like climate change and love languages." data-lang-zh="促進了以SDG 4為中心的學生交流，主題涵蓋氣候變化和文化（愛之語）。">Facilitated student exchange focused on SDG 4 (Quality Education) and topics like climate change and love languages.</p>
-                    </div>
-                </div>
-
-                <!-- Project 2: Germany - Exchange Visit -->
-                <div class="bg-white rounded-xl shadow-lg border-t-4 border-corporate-accent overflow-hidden">
-                    <img src="https://placehold.co/400x200/0ea5e9/000000?text=Germany+Academic+Visit" 
-                         alt="Placeholder image for Germany Academic Exchange" 
-                         class="w-full h-40 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-lg font-bold text-ntust-blue mb-2" data-lang-en="Germany: Academic Exchange Visit" data-lang-zh="德國：學術交流訪問">Germany: Academic Exchange Visit</h4>
-                        <p class="text-gray-600 text-sm" data-lang-en="Travelled with a team to Germany to establish and support international exchange programs." data-lang-zh="與團隊前往德國，建立並支持國際交流專案。">Travelled with a team to Germany to establish and support international exchange programs.</p>
-                    </div>
-                </div>
-
-                <!-- Project 3: Japan - AR/VR Vocational Collaboration -->
-                <div class="bg-white rounded-xl shadow-lg border-t-4 border-corporate-accent overflow-hidden">
-                    <img src="https://placehold.co/400x200/004B87/FFFFFF?text=Japan+Collaboration" 
-                         alt="Placeholder image for Japan AR/VR Education Collaboration" 
-                         class="w-full h-40 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-lg font-bold text-ntust-blue mb-2" data-lang-en="Japan: AR/VR Vocational Collaboration" data-lang-zh="日本：AR/VR職業教育合作">Japan: AR/VR Vocational Collaboration</h4>
-                        <p class="text-gray-600 text-sm" data-lang-en="Collaboration focused on integrating Augmented and Virtual Reality into technical and vocational education." data-lang-zh="合作重點是將擴增與虛擬實境整合到技術與職業教育中。">Collaboration focused on integrating Augmented and Virtual Reality into technical and vocational education.</p>
-                    </div>
-                </div>
-
-                <!-- Project 4: Philippines - Digital Capacity Building -->
-                <div class="bg-white rounded-xl shadow-lg border-t-4 border-corporate-accent overflow-hidden">
-                    <img src="https://placehold.co/400x200/0ea5e9/000000?text=Philippines+Digital+Training" 
-                         alt="Placeholder image for Philippines Digital Capacity Building" 
-                         class="w-full h-40 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-lg font-bold text-ntust-blue mb-2" data-lang-en="Philippines: Digital Capacity Building" data-lang-zh="菲律賓：數位能力建構">Philippines: Digital Capacity Building</h4>
-                        <p class="text-gray-600 text-sm" data-lang-en="Engagement in digital education capacity building and intercultural learning programs." data-lang-zh="參與數位教育能力建構和跨文化學習專案。">Engagement in digital education capacity building and intercultural learning programs.</p>
-                    </div>
-                </div>
+            <div class="max-w-5xl mx-auto h-[700px] overflow-y-auto pr-6 border-t border-b border-gray-100 py-8">
+                <div id="pub-list" class="space-y-6"></div>
+                <div id="conf-list" class="space-y-4 hidden"></div>
             </div>
         </section>
-        
-        <!-- NEW 5. GALLERY SECTION - GENERAL PHOTOS -->
-        <section id="gallery" class="pt-10">
-            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2"
-                data-lang-en="Global Engagement Photo Gallery"
-                data-lang-zh="全球參與相簿">
-                Global Engagement Photo Gallery
-            </h2>
 
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                
-                <!-- Random Gallery Photos -->
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300">
-                    <img src="https://placehold.co/400x300/004B87/FFFFFF?text=Global+Conference" 
-                         alt="Professor Weng at an international conference" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-sm text-gray-600" data-lang-en="International Conference Presentation" data-lang-zh="國際會議簡報">International Conference Presentation</p>
+        <!-- 8. GALLERY -->
+        <section id="gallery" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="Global Engagement Gallery" data-lang-zh="全球影音相簿">Global Engagement Gallery</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="group relative rounded-xl overflow-hidden shadow-lg aspect-square">
+                    <img src="https://placehold.co/400x400/004B87/FFFFFF?text=Kenya+Service" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-ntust-blue/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
+                        <p class="text-white text-xs font-bold" data-lang-en="Kenya: Study-Buddy Program" data-lang-zh="肯亞：數位學伴服務計畫"></p>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300">
-                    <img src="https://placehold.co/400x300/0ea5e9/000000?text=Workshop+in+Asia" 
-                         alt="Professor Weng leading a workshop in Asia" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-sm text-gray-600" data-lang-en="Leading Workshop on Digital Learning" data-lang-zh="領導數位學習工作坊">Leading Workshop on Digital Learning</p>
+                <div class="group relative rounded-xl overflow-hidden shadow-lg aspect-square">
+                    <img src="https://placehold.co/400x400/0ea5e9/FFFFFF?text=Germany+Collab" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-ntust-blue/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
+                        <p class="text-white text-xs font-bold" data-lang-en="Germany: Academic Exchange" data-lang-zh="德國：國際學術交流"></p>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300">
-                    <img src="https://placehold.co/400x300/004B87/FFFFFF?text=University+Meeting" 
-                         alt="Professor Weng at NTUST meeting" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-sm text-gray-600" data-lang-en="NTUST Official Engagement" data-lang-zh="臺科大官方活動">NTUST Official Engagement</p>
+                <div class="group relative rounded-xl overflow-hidden shadow-lg aspect-square">
+                    <img src="https://placehold.co/400x400/004B87/FFFFFF?text=Vietnam+Intern" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-ntust-blue/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
+                        <p class="text-white text-xs font-bold" data-lang-en="Vietnam: Teaching Internship" data-lang-zh="越南：海外教育實習"></p>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300">
-                    <img src="https://placehold.co/400x300/0ea5e9/000000?text=Collaboration+Trip" 
-                         alt="Professor Weng meeting international collaborators" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-sm text-gray-600" data-lang-en="Meeting with Collaborators Abroad" data-lang-zh="會見海外合作夥伴">Meeting with Collaborators Abroad</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300">
-                    <img src="https://placehold.co/400x300/0ea5e9/000000?text=Lecture" 
-                         alt="Professor Weng lecturing" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-sm text-gray-600" data-lang-en="Guest Lecture at Foreign University" data-lang-zh="國外大學客座講座">Guest Lecture at Foreign University</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300">
-                    <img src="https://placehold.co/400x300/004B87/FFFFFF?text=Taiwan+Campus" 
-                         alt="Professor Weng on campus" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-sm text-gray-600" data-lang-en="Campus Activity in Taiwan" data-lang-zh="臺灣校園活動">Campus Activity in Taiwan</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300">
-                    <img src="https://placehold.co/400x300/0ea5e9/000000?text=Group+Photo" 
-                         alt="Group photo with exchange students" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-sm text-gray-600" data-lang-en="Group Photo with Students" data-lang-zh="與學生合影">Group Photo with Students</p>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:opacity-90 transition-opacity duration-300">
-                    <img src="https://placehold.co/400x300/004B87/FFFFFF?text=Tech+Expo" 
-                         alt="Professor Weng at a technology exhibition" 
-                         class="w-full h-48 object-cover">
-                    <div class="p-3 text-center">
-                        <p class="text-sm text-gray-600" data-lang-en="Educational Technology Exhibition" data-lang-zh="教育科技展覽">Educational Technology Exhibition</p>
+                <div class="group relative rounded-xl overflow-hidden shadow-lg aspect-square">
+                    <img src="https://placehold.co/400x400/0ea5e9/FFFFFF?text=Japan+Seminar" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-ntust-blue/70 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center p-4 text-center">
+                        <p class="text-white text-xs font-bold" data-lang-en="Japan: Academic Symposium" data-lang-zh="日本：學術研討交流"></p>
                     </div>
                 </div>
             </div>
         </section>
 
-
-        <!-- 5. PUBLICATIONS SECTION (Featured Journal Articles) -->
-        <section id="publications" class="pt-10">
-            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2"
-                data-lang-en="Key Research Publications"
-                data-lang-zh="關鍵研究出版物">
-                Key Research Publications
-            </h2>
-
-            <!-- Featured Journal Publications (Top 3) -->
-            <h3 class="text-3xl font-semibold text-corporate-accent mb-6" data-lang-en="Featured Journal Articles" data-lang-zh="精選期刊論文">Featured Journal Articles</h3>
-            <div class="space-y-6">
-                <!-- Pub 1 -->
-                <div class="publication-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-ntust-blue">
-                    <div class="cursor-pointer flex justify-between items-start" onclick="toggleCard(this)">
-                        <p class="font-bold text-lg mb-2 text-ntust-blue pr-8" data-lang-en="Weng, C., Kassaw, K., Tsai, P. S., & Lee, T. J. (2024). Scratch animation for SDGs with AI-comics: Impact on empathy, self-efficacy, and skills. Education and Information Technologies." data-lang-zh="翁楊絲茜 、Kassaw, K.、蔡佩珊、李志建 (2024)。將Scratch動畫用於結合AI漫畫的SDGs：對同理心、自我效能和技能的影響。《教育與資訊科技》。">
-                            Weng, C., Kassaw, K., Tsai, P. S., & Lee, T. J. (2024). Scratch animation for SDGs with AI-comics: Impact on empathy, self-efficacy, and skills. Education and Information Technologies.
-                        </p>
-                        <i data-lucide="chevron-down" class="w-5 h-5 flex-shrink-0 text-corporate-accent transition-transform duration-300 mt-1"></i>
-                    </div>
-                    <div class="collapsible-content mt-4 overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
-                        <p class="text-gray-600 border-t pt-4" data-lang-en="Abstract: This study explores the effectiveness of integrating Scratch animation with AI-generated comics to teach Sustainable Development Goals (SDGs). Findings show significant positive impacts on student empathy, self-efficacy, and digital creation skills, demonstrating a novel, technology-enhanced approach to global education." data-lang-zh="摘要：本研究探討將Scratch動畫與人工智慧生成的漫畫結合，用於永續發展目標（SDGs）教學的有效性。研究結果顯示對學生的同理心、自我效能和數位創作技能有顯著的正面影響，展示了一種新穎、技術增強的全球教育方法。">
-                            Abstract: This study explores the effectiveness of integrating Scratch animation with AI-generated comics to teach Sustainable Development Goals (SDGs). Findings show significant positive impacts on student empathy, self-efficacy, and digital creation skills, demonstrating a novel, technology-enhanced approach to global education.
-                        </p>
+        <!-- 9. ACADEMIC JOURNEY & EDUCATION -->
+        <section id="academic-journey" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="Academic Journey & Education" data-lang-zh="學術歷程與教育背景">Academic Journey & Education</h2>
+            <div class="grid lg:grid-cols-3 gap-8 mb-12">
+                <!-- Education -->
+                <div class="lg:col-span-1 space-y-6">
+                    <h3 class="text-2xl font-bold text-corporate-accent border-l-4 border-corporate-accent pl-4" data-lang-en="Education" data-lang-zh="學歷背景">Education</h3>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-t-8 border-ntust-blue">
+                        <div class="mb-4">
+                            <span class="text-xs font-black text-gray-400 block uppercase">2000 | USC</span>
+                            <p class="font-bold text-ntust-blue text-sm" data-lang-en="Ph.D. Education Administration" data-lang-zh="教育行政 哲學博士"></p>
+                        </div>
+                        <div class="mb-4">
+                            <span class="text-xs font-black text-gray-400 block uppercase">1994 | USC</span>
+                            <p class="font-bold text-ntust-blue text-sm" data-lang-en="MPA Public Administration" data-lang-zh="公共行政 碩士"></p>
+                        </div>
+                        <div>
+                            <span class="text-xs font-black text-gray-400 block uppercase">1993 | USC</span>
+                            <p class="font-bold text-ntust-blue text-sm" data-lang-en="BS Business Administration" data-lang-zh="營運管理 學士"></p>
+                        </div>
                     </div>
                 </div>
-
-                <!-- Pub 2 -->
-                <div class="publication-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-ntust-blue">
-                    <div class="cursor-pointer flex justify-between items-start" onclick="toggleCard(this)">
-                        <p class="font-bold text-lg mb-2 text-ntust-blue pr-8" data-lang-en="Astatke, M., Weng, C., Yohannes, A., Isaac, M. M., & Liou, W. K. (2024). Immersive VR-based STREAM approach in education. Educational Technology Research and Development." data-lang-zh="Astatke, M.、翁楊絲茜 、Yohannes, A.、Isaac, M. M.、劉偉欽 (2024)。教育中沉浸式VR-based STREAM方法。《教育技術研究與發展》。">
-                            Astatke, M., Weng, C., Yohannes, A., Isaac, M. M., & Liou, W. K. (2024). Immersive VR-based STREAM approach in education. Educational Technology Research and Development.
-                        </p>
-                        <i data-lucide="chevron-down" class="w-5 h-5 flex-shrink-0 float-right text-corporate-accent transition-transform duration-300 mt-1"></i>
-                    </div>
-                    <div class="collapsible-content mt-4 overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
-                        <p class="text-gray-600 border-t pt-4" data-lang-en="Abstract: This article presents a new framework for integrating Virtual Reality (VR) into the STREAM curriculum, showing how immersive environments can improve student engagement, spatial reasoning, and complex problem-solving abilities." data-lang-zh="摘要：本文提出了一個將虛擬實境（VR）整合到 STREAM 課程中的新框架，展示了沉浸式環境如何提高學生的參與度、空間推理能力和複雜問題解決能力。">
-                            Abstract: This article presents a new framework for integrating Virtual Reality (VR) into the STREAM curriculum, showing how immersive environments can improve student engagement, spatial reasoning, and complex problem-solving abilities.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Pub 3 -->
-                <div class="publication-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-ntust-blue">
-                    <div class="cursor-pointer flex justify-between items-start" onclick="toggleCard(this)">
-                        <p class="font-bold text-lg mb-2 text-ntust-blue pr-8" data-lang-en="Puspitasari, D., Weng, C., Chu, R. J. C., & Chu, A. Z. C. (2024). Internet epistemic belief, digital literacy and social media engagement. Interactive Learning Environments." data-lang-zh="Puspitasari, D.、翁楊絲茜 、朱柔潔、朱子慶 (2024)。網路認知信念、數位素養與社群媒體參與。《互動學習環境》。">
-                            Puspitasari, D., Weng, C., Chu, R. J. C., & Chu, A. Z. C. (2024). Internet epistemic belief, digital literacy and social media engagement. Interactive Learning Environments.
-                        </p>
-                        <i data-lucide="chevron-down" class="w-5 h-5 flex-shrink-0 float-right text-corporate-accent transition-transform duration-300 mt-1"></i>
-                    </div>
-                    <div class="collapsible-content mt-4 overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
-                        <p class="text-gray-600 border-t pt-4" data-lang-en="Abstract: The research investigates the interplay between how students perceive knowledge on the internet (epistemic belief), their digital skills, and their active engagement with social media for learning purposes, identifying key factors for effective online interaction." data-lang-zh="摘要：本研究探討學生對網路知識的認知（認知信念）、他們的數位技能以及他們積極參與社群媒體進行學習之間的相互作用，並確定有效線上互動的關鍵因素。">
-                            Abstract: The research investigates the interplay between how students perceive knowledge on the internet (epistemic belief), their digital skills, and their active engagement with social media for learning purposes, identifying key factors for effective online interaction.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- 6. CONFERENCE ACTIVITIES SECTION -->
-        <section id="conference-activities" class="pt-10">
-            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2"
-                data-lang-en="Conference Activities"
-                data-lang-zh="會議活動">
-                Conference Activities
-            </h2>
-
-            <h3 class="text-3xl font-semibold text-corporate-accent mb-6" data-lang-en="Recent Conference Proceedings (2025)" data-lang-zh="近期會議論文（2025）">Recent Conference Proceedings (2025)</h3>
-            <div class="space-y-4">
-                <div class="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-ntust-blue">
-                    <p class="font-medium" data-lang-en="Astatke, M., Weng, C., & Alem, A. A. (2025, November). A Meta-Analysis on the Impact of Wireless Sensor Networks in Smart Classrooms: Advancing Student Engagement and Learning Analytics in Digital Education. In Electrochemical Society Meeting Abstracts 248 (No. 63, pp. 2904-2904)." data-lang-zh="Astatke, M.、翁楊絲茜 、Alem, A. A. (2025, 11月)。智慧教室中無線感測器網絡影響的薈萃分析：推進數位教育中的學生參與和學習分析。《電化學學會會議摘要 248》。">
-                        Astatke, M., Weng, C., & Alem, A. A. (2025, November). A Meta-Analysis on the Impact of Wireless Sensor Networks in Smart Classrooms: Advancing Student Engagement and Learning Analytics in Digital Education. In Electrochemical Society Meeting Abstracts 248 (No. 63, pp. 2904-2904).
-                    </p>
-                </div>
-                <div class="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-ntust-blue">
-                    <p class="font-medium" data-lang-en="Alem, A. A., Weng, C., & Astatke, M. (2025, November). Emerging Trends in Wireless Sensor Networks for Healthcare: A Systematic Review of Technological Innovations, Algorithmic Approaches, and Implementation Challenges. In Electrochemical Society Meeting Abstracts 248 (No. 63, pp. 2905-2905)." data-lang-zh="Alem, A. A.、翁楊絲茜 、Astatke, M. (2025, 11月)。用於醫療保健的無線感測器網絡的新興趨勢：技術創新、演算法方法和實施挑戰的系統綜述。《電化學學會會議摘要 248》。">
-                        Alem, A. A., Weng, C., & Astatke, M. (2025, November). Emerging Trends in Wireless Sensor Networks for Healthcare: A Systematic Review of Technological Innovations, Algorithmic Approaches, and Implementation Challenges. In Electrochemical Society Meeting Abstracts 248 (No. 63, pp. 2905-2905).
-                    </p>
-                </div>
-                
-                <h3 class="text-3xl font-semibold text-corporate-accent pt-6 mb-4" data-lang-en="Selected Presentations" data-lang-zh="精選口頭報告">Selected Presentations</h3>
-                
-                <div class="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-corporate-accent">
-                    <p data-lang-en="Tran, K. N. P., Weng, C., Nguyen, P. N., Lee, T. J. (2025, May). Enhancing students' social-emotional skills and cultural intelligence through a Digital Intercultural Learning Course. The 13th OpenTESOL International Hybrid Conference 2025, Ho Chi Minh City, Vietnam." data-lang-zh="Tran, K. N. P.、翁楊絲茜 、Nguyen, P. N.、李志建 (2025, May)。透過數位跨文化學習課程提升學生的社交情緒技能和文化智能。第13屆 OpenTESOL 國際混合會議，越南胡志明市。">
-                        Tran, K. N. P., Weng, C., Nguyen, P. N., Lee, T. J. (2025, May). Enhancing students' social-emotional skills and cultural intelligence through a Digital Intercultural Learning Course. The 13th OpenTESOL International Hybrid Conference 2025, Ho Chi Minh City, Vietnam.
-                    </p>
-                </div>
-                <div class="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-corporate-accent">
-                    <p data-lang-en="Tran, K. N. P., Nguyen, P. N., Weng, C., Mubarok, H., Lee, T. J. (2025, August). Generative AI-supported language education: effects on students' writing skills and classroom engagement. VietTESOL International Convention 2025, Can Tho City, Vietnam." data-lang-zh="Tran, K. N. P.、Nguyen, P. N.、翁楊絲茜 、Mubarok, H.、李志建 (2025, 8月)。生成式人工智慧支持的語言教育：對學生寫作技能和課堂參與的影響。VietTESOL 國際大會 2025，越南芹苴市。">
-                        Tran, K. N. P., Nguyen, P. N., Weng, C., Mubarok, H., Lee, T. J. (2025, August). Generative AI-supported language education: effects on students' writing skills and classroom engagement. VietTESOL International Convention 2025, Can Tho City, Vietnam.
-                    </p>
-                </div>
-                <div class="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-corporate-accent">
-                    <p data-lang-en="Kimanzi, M.W., Weng, C., Kosey, K.A., & Tsai, Y.-J. (2025, November 22). Reclaiming the Power of Technical and Vocational Education: Identity, Well-Being, and Purpose through AI-Enhanced Life Reviews. 21st AASVET International Conference, University of Tsukuba, Japan." data-lang-zh="Kimanzi, M.W.、翁楊絲茜 、Kosey, K.A.、蔡宇晶 (2025, 11月22日)。重塑技術與職業教育的力量：通過人工智慧增強的生命回顧實現身份、福祉和目標。第21屆 AASVET 國際會議，日本筑波大學。">
-                        Kimanzi, M.W., Weng, C., Kosey, K.A., & Tsai, Y.-J. (2025, November 22). Reclaiming the Power of Technical and Vocational Education: Identity, Well-Being, and Purpose through AI-Enhanced Life Reviews. 21st AASVET International Conference, University of Tsukuba, Japan.
-                    </p>
-                </div>
-                <div class="p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border-l-4 border-corporate-accent">
-                    <p data-lang-en="Chang, R.-F., Weng, C., Weng, A., Yang, J.-T., Mitsuha, H. (2025, November 21-22). Integrating AR and VR in Taiwan's Technology Curriculum: Impacts on Junior High Students' Safety Knowledge and Skills. The 21st AASVET International Conference, University of Tsukuba, Japan. https://ubonasm.net/AASVET2025/" data-lang-zh="張瑞芳、翁楊絲茜 、翁安、楊家豪、Mitsuha, H. (2025, 11月21-22日)。在台灣科技課程中整合AR和VR：對國中學生安全知識和技能的影響。第21屆 AASVET 國際會議，日本筑波大學。">
-                        Chang, R.-F., Weng, C., Weng, A., Yang, J.-T., Mitsuha, H. (2025, November 21-22). Integrating AR and VR in Taiwan's Technology Curriculum: Impacts on Junior High Students' Safety Knowledge and Skills. The 21st AASVET International Conference, University of Tsukuba, Japan. <a href="https://ubonasm.net/AASVET2025/" target="_blank" class="text-corporate-accent hover:underline">https://ubonasm.net/AASVET2025/</a>
-                    </p>
+                <!-- Journey -->
+                <div class="lg:col-span-2">
+                    <h3 class="text-2xl font-bold text-ntust-blue border-l-4 border-ntust-blue pl-4 mb-8" data-lang-en="Professional Career" data-lang-zh="專業經歷">Professional Career</h3>
+                    <div id="journey-list" class="relative timeline-container space-y-8"></div>
                 </div>
             </div>
         </section>
 
-        <!-- 7. ACADEMIC JOURNEY (Timeline Visualization) -->
-        <section id="academic-journey" class="pt-10">
-            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2"
-                data-lang-en="Academic and Administrative Journey"
-                data-lang-zh="學術與行政歷程">
-                Academic and Administrative Journey
-            </h2> 
-
-            <div class="relative timeline-container max-w-4xl mx-auto">
-                <!-- Timeline items -->
-                <div class="timeline-item relative mb-8">
-                    <div class="timeline-item-dot absolute -left-2 bg-corporate-accent w-4 h-4 rounded-full z-10 hidden md:block border-2 border-white shadow-md"></div>
-                    <div class="timeline-item-dot absolute -top-1 -left-1 w-3 h-3 bg-corporate-accent rounded-full md:hidden"></div>
-                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-corporate-accent">
-                        <p class="text-sm font-semibold text-gray-500 mb-1">2021–Present</p>
-                        <h4 class="text-xl font-bold text-ntust-blue" data-lang-en="Director of Public Relations (Highlighted)" data-lang-zh="公共事務處處長（重點職位）">Director of Public Relations (Highlighted)</h4>
-                        <p class="text-gray-600" data-lang-en="National Taiwan University of Science and Technology (NTUST)" data-lang-zh="國立臺灣科技大學">NTUST</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item relative mb-8">
-                    <div class="timeline-item-dot absolute -left-2 bg-corporate-accent w-4 h-4 rounded-full z-10 hidden md:block border-2 border-white shadow-md"></div>
-                    <div class="timeline-item-dot absolute -top-1 -left-1 w-3 h-3 bg-corporate-accent rounded-full md:hidden"></div>
-                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-ntust-blue">
-                        <p class="text-sm font-semibold text-gray-500 mb-1">2020–Present</p>
-                        <h4 class="text-xl font-bold text-ntust-blue" data-lang-en="Professor" data-lang-zh="教授">Professor</h4>
-                        <p class="text-gray-600" data-lang-en="Teacher Education Center / Graduate Institute of Digital Learning and Education, NTUST" data-lang-zh="國立臺灣科技大學 師資培育中心 / 數位學習與教育研究所">NTUST</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item relative mb-8">
-                    <div class="timeline-item-dot absolute -left-2 bg-corporate-accent w-4 h-4 rounded-full z-10 hidden md:block border-2 border-white shadow-md"></div>
-                    <div class="timeline-item-dot absolute -top-1 -left-1 w-3 h-3 bg-corporate-accent rounded-full md:hidden"></div>
-                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-ntust-blue">
-                        <p class="text-sm font-semibold text-gray-500 mb-1">2015–2019</p>
-                        <h4 class="text-xl font-bold text-ntust-blue" data-lang-en="Associate Professor" data-lang-zh="副教授">Associate Professor</h4>
-                        <p class="text-gray-600" data-lang-en="National Taiwan University of Science and Technology (NTUST)" data-lang-zh="國立臺灣科技大學">NTUST</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item relative mb-8">
-                    <div class="timeline-item-dot absolute -left-2 bg-corporate-accent w-4 h-4 rounded-full z-10 hidden md:block border-2 border-white shadow-md"></div>
-                    <div class="timeline-item-dot absolute -top-1 -left-1 w-3 h-3 bg-corporate-accent rounded-full md:hidden"></div>
-                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-corporate-accent">
-                        <p class="text-sm font-semibold text-gray-500 mb-1">2009–2015</p>
-                        <h4 class="text-xl font-bold text-ntust-blue" data-lang-en="Director, Center of Gender Studies (Highlighted)" data-lang-zh="性別研究中心主任（重點職位）">Director, Center of Gender Studies (Highlighted)</h4>
-                        <p class="text-gray-600" data-lang-en="National Taiwan University of Science and Technology (NTUST)" data-lang-zh="國立臺灣科技大學">NTUST</p>
-                    </div>
-                </div>
-
-                <div class="timeline-item relative mb-8">
-                    <div class="timeline-item-dot absolute -left-2 bg-corporate-accent w-4 h-4 rounded-full z-10 hidden md:block border-2 border-white shadow-md"></div>
-                    <div class="timeline-item-dot absolute -top-1 -left-1 w-3 h-3 bg-corporate-accent rounded-full md:hidden"></div>
-                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-ntust-blue">
-                        <p class="text-sm font-semibold text-gray-500 mb-1">2002–2015</p>
-                        <h4 class="text-xl font-bold text-ntust-blue" data-lang-en="Assistant Professor" data-lang-zh="助理教授">Assistant Professor</h4>
-                        <p class="text-gray-600" data-lang-en="National Taiwan University of Science and Technology (NTUST)" data-lang-zh="國立臺灣科技大學">NTUST</p>
-                    </div>
-                </div>
-                
-                <h3 class="text-3xl font-semibold text-corporate-accent pt-6 mb-4" data-lang-en="Education" data-lang-zh="教育背景">Education</h3>
-                
-                <div class="timeline-item relative mb-8">
-                    <div class="timeline-item-dot absolute -left-2 bg-corporate-accent w-4 h-4 rounded-full z-10 hidden md:block border-2 border-white shadow-md"></div>
-                    <div class="timeline-item-dot absolute -top-1 -left-1 w-3 h-3 bg-corporate-accent rounded-full md:hidden"></div>
-                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-corporate-accent">
-                        <p class="text-sm font-semibold text-gray-500 mb-1">2000</p>
-                        <h4 class="text-xl font-bold text-ntust-blue" data-lang-en="Ph.D. in Education Administration" data-lang-zh="教育行政學 博士">Ph.D. in Education Administration</h4>
-                        <p class="text-gray-600">University of Southern California (USC), USA</p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item relative mb-8">
-                    <div class="timeline-item-dot absolute -left-2 bg-corporate-accent w-4 h-4 rounded-full z-10 hidden md:block border-2 border-white shadow-md"></div>
-                    <div class="timeline-item-dot absolute -top-1 -left-1 w-3 h-3 bg-corporate-accent rounded-full md:hidden"></div>
-                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-ntust-blue">
-                        <p class="text-sm font-semibold text-gray-500 mb-1">1994</p>
-                        <h4 class="text-xl font-bold text-ntust-blue" data-lang-en="MPA in Public Administration" data-lang-zh="公共行政學 碩士">MPA in Public Administration</h4>
-                        <p class="text-gray-600">University of Southern California (USC), USA</p>
-                    </div>
-                </div>
-                
-                <div class="timeline-item relative mb-8">
-                    <div class="timeline-item-dot absolute -left-2 bg-corporate-accent w-4 h-4 rounded-full z-10 hidden md:block border-2 border-white shadow-md"></div>
-                    <div class="timeline-item-dot absolute -top-1 -left-1 w-3 h-3 bg-corporate-accent rounded-full md:hidden"></div>
-                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-corporate-accent">
-                        <p class="text-sm font-semibold text-gray-500 mb-1">1993</p>
-                        <h4 class="text-xl font-bold text-ntust-blue" data-lang-en="BS in Operational Management & Information Systems" data-lang-zh="營運管理與資訊系統學士">BS in Operational Management & Information Systems</h4>
-                        <p class="text-gray-600">University of Southern California (USC), USA</p>
-                    </div>
+        <!-- 10. CONTACT & COLLABORATION -->
+        <section id="contact" class="scroll-mt-24">
+            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2" data-lang-en="Contact & Collaboration" data-lang-zh="聯繫方式與合作">Contact & Collaboration</h2>
+            
+            <div class="max-w-4xl mx-auto mb-10 text-center">
+                <div class="bg-blue-50 border-l-4 border-corporate-accent p-6 rounded-r-xl shadow-sm inline-block">
+                    <p class="text-lg md:text-xl font-semibold text-ntust-blue italic mb-2" data-lang-en="&ldquo;I welcome collaboration with international scholars and students interested in AI, digital literacy, and educational innovation.&rdquo;" data-lang-zh="「我竭誠歡迎對人工智慧、數位素養及教育創新感興趣的國際學者與學生共同合作。」"></p>
                 </div>
             </div>
-        </section>
 
-        <!-- 8. COLLABORATION & CONTACT -->
-        <section id="contact" class="pt-10">
-            <h2 class="text-4xl font-bold text-center text-ntust-blue mb-12 border-b-2 border-corporate-accent pb-2"
-                data-lang-en="Collaboration & Contact"
-                data-lang-zh="合作與聯繫">
-                Collaboration & Contact
-            </h2>
-
-            <div class="grid md:grid-cols-2 gap-8">
-                <!-- Contact Details -->
-                <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-semibold text-ntust-blue mb-4" data-lang-en="Get in Touch" data-lang-zh="聯繫方式">Get in Touch</h3>
-                    <p class="mb-4" data-lang-en="I welcome collaborations on research, graduate mentoring, and educational projects aligning with digital innovation and global competence." data-lang-zh="我歡迎在數位創新和全球能力領域進行研究合作、研究生指導和教育專案。">
-                        I welcome collaborations on research, graduate mentoring, and educational projects aligning with digital innovation and global competence.
-                    </p>
-                    <div class="space-y-3">
-                        <p class="flex items-start">
-                            <i data-lucide="map-pin" class="w-5 h-5 mr-3 mt-1 text-corporate-accent flex-shrink-0"></i>
-                            <span data-lang-en="Office: Teacher Education Center, NTUST, No. 43, Sec. 4, Keelung Rd., Da'an Dist., Taipei City 106335, Taiwan" data-lang-zh="辦公室地址: 國立臺灣科技大學 師資培育中心, 106335 臺北市大安區基隆路四段43號">Office: Teacher Education Center, NTUST, No. 43, Sec. 4, Keelung Rd., Da'an Dist., Taipei City 106335, Taiwan</span>
-                        </p>
-                        <p class="flex items-center">
-                            <i data-lucide="mail" class="w-5 h-5 mr-3 text-corporate-accent"></i>
-                            <a href="mailto:cathyhaien@hotmail.com" class="hover:text-ntust-blue transition-colors duration-300">cathyhaien@hotmail.com</a>
-                        </p>
-                        <p class="flex items-center">
-                            <i data-lucide="phone" class="w-5 h-5 mr-3 text-corporate-accent"></i>
-                            <a href="tel:+886-918-333-336" class="hover:text-ntust-blue transition-colors duration-300">+886-918-333-336</a>
-                        </p>
+            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white p-8 rounded-xl shadow-lg border-t-8 border-ntust-blue flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-lg text-ntust-blue mb-4">NTUST Office</h4>
+                        <p class="text-gray-600 mb-2">Teacher Education Center, T4-405</p>
+                        <p class="text-gray-600 mb-6">No. 43, Keelung Rd., Sec. 4, Taipei 106, Taiwan</p>
                     </div>
-
-                    <a href="#" class="mt-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-ntust-blue hover:bg-corporate-accent transition-colors duration-300"
-                       data-lang-en="Download Full CV (Placeholder)" data-lang-zh="下載完整履歷 (佔位符)">
-                        <i data-lucide="download" class="w-5 h-5 mr-2"></i>
-                        Download Full CV (Placeholder)
-                    </a>
+                    <div class="space-y-2">
+                        <p class="flex items-center text-sm"><i data-lucide="mail" class="w-4 h-4 mr-2 text-accent"></i> cathyhaien@hotmail.com</p>
+                        <p class="flex items-center text-sm"><i data-lucide="phone" class="w-4 h-4 mr-2 text-accent"></i> +886-918-333-336</p>
+                    </div>
                 </div>
-
-                <!-- Academic Profiles -->
-                <div class="bg-white p-8 rounded-xl shadow-lg">
-                    <h3 class="text-2xl font-semibold text-ntust-blue mb-4" data-lang-en="Academic Profiles" data-lang-zh="學術檔案">Academic Profiles</h3>
-                    <div class="space-y-4">
-                        <a href="#" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200 border-l-4 border-corporate-accent">
-                            <i data-lucide="graduation-cap" class="w-6 h-6 mr-3 text-ntust-blue"></i>
-                            <span data-lang-en="Google Scholar Profile" data-lang-zh="Google Scholar 個人資料">Google Scholar Profile</span>
+                <div class="bg-white p-8 rounded-xl shadow-lg border-t-8 border-corporate-accent">
+                    <h4 class="font-bold text-lg text-ntust-blue mb-4">Academic Profiles</h4>
+                    <div class="grid gap-3">
+                        <a href="#" class="flex items-center p-3 bg-gray-50 rounded-lg group hover:bg-ntust-blue transition-all">
+                            <span class="font-black text-xs text-corporate-accent group-hover:text-white mr-3">GS</span>
+                            <span class="text-sm font-bold group-hover:text-white">Google Scholar</span>
                         </a>
-                        <a href="#" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200 border-l-4 border-corporate-accent">
-                            <i data-lucide="flask-conical" class="w-6 h-6 mr-3 text-ntust-blue"></i>
-                            <span data-lang-en="ResearchGate Profile" data-lang-zh="ResearchGate 個人資料">ResearchGate Profile</span>
+                        <a href="#" class="flex items-center p-3 bg-gray-50 rounded-lg group hover:bg-ntust-blue transition-all">
+                            <span class="font-black text-xs text-corporate-accent group-hover:text-white mr-3">RG</span>
+                            <span class="text-sm font-bold group-hover:text-white">ResearchGate</span>
                         </a>
-                        <a href="#" class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors duration-200 border-l-4 border-corporate-accent">
-                            <i data-lucide="link-2" class="w-6 h-6 mr-3 text-ntust-blue"></i>
-                            <span data-lang-en="ORCID ID" data-lang-zh="ORCID ID">ORCID ID (Placeholder Link)</span>
+                        <a href="#" class="flex items-center p-3 bg-gray-50 rounded-lg group hover:bg-ntust-blue transition-all">
+                            <span class="font-black text-xs text-corporate-accent group-hover:text-white mr-3">ID</span>
+                            <span class="text-sm font-bold group-hover:text-white">ORCID Profile</span>
                         </a>
                     </div>
                 </div>
@@ -680,167 +299,226 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-ntust-blue text-white py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-sm opacity-80" data-lang-en="© 2025 Professor Cathy Weng. Built with a Research-First Interactive Portfolio approach." data-lang-zh="© 2025 翁楊絲茜 。以「研究優先互動式組合」方法建構。">
-                © 2025 Professor Cathy Weng. Built with a Research-First Interactive Portfolio approach.
-            </p>
-        </div>
+    <footer class="bg-ntust-blue text-white py-12 text-center mt-20">
+        <p class="text-sm opacity-80">© 2025 Professor Cathy Weng. All Content Verified by CV.</p>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button id="back-to-top" class="fixed bottom-6 right-6 p-3 bg-corporate-accent text-white rounded-full shadow-lg opacity-0 transition-opacity duration-300 hover:bg-ntust-blue" style="z-index: 1000;" aria-label="Back to top">
-        <i data-lucide="arrow-up" class="w-6 h-6"></i>
-    </button>
-
+    <button id="back-to-top" class="fixed bottom-6 right-6 p-3 bg-ntust-blue text-white rounded-full shadow-lg opacity-0 transition-opacity"><i data-lucide="arrow-up" class="w-6 h-6"></i></button>
 
     <script>
-        let currentLang = 'en'; // Default language is English
+        let currentLang = 'en';
 
-        // 1. Language Toggle Functionality
-        function updateContent() {
-            const isEnglish = currentLang === 'en';
-            const targetLang = isEnglish ? 'en' : 'zh';
-            const body = document.body;
-
-            // Update body font class for correct rendering
-            if (isEnglish) {
-                body.classList.remove('font-chinese');
-                body.classList.add('font-english');
-            } else {
-                body.classList.remove('font-english');
-                body.classList.add('font-chinese');
-            }
-
-            // Update all elements with language attributes
-            document.querySelectorAll('[data-lang-en], [data-lang-zh]').forEach(el => {
-                const enContent = el.getAttribute('data-lang-en');
-                const zhContent = el.getAttribute('data-lang-zh');
-
-                // Check if the element is an anchor <a> tag within the conference activities.
-                // We want to skip updating the text content if it's an anchor with an href, 
-                // to prevent accidentally overwriting a link URL displayed as text.
-                if (el.tagName === 'A' && el.getAttribute('href') && el.closest('#conference-activities')) {
-                    // Do nothing for links that should maintain their visible URL
-                } else if (targetLang === 'en' && enContent) {
-                    el.textContent = enContent;
-                } else if (targetLang === 'zh' && zhContent) {
-                    el.textContent = zhContent;
-                }
-            });
-
-            // Update the toggle button text
-            const toggleButton = document.getElementById('lang-toggle');
-            if (isEnglish) {
-                toggleButton.textContent = '繁體中文';
-            } else {
-                toggleButton.textContent = 'English';
-            }
-        }
-
-        document.getElementById('lang-toggle').addEventListener('click', () => {
-            currentLang = currentLang === 'en' ? 'zh' : 'en';
-            updateContent();
-        });
-
-        // 2. Expandable Card Functionality (Research & Publications)
-        window.toggleCard = function(element) {
-            // Find the parent card element
-            const card = element.closest('.bg-white, .publication-card');
-            if (!card) return;
-
-            // Find the collapsible content and the icon
-            const content = card.querySelector('.collapsible-content');
-            const icon = card.querySelector('[data-lucide="chevron-down"]');
-            
-            // Check if the card is already expanded
-            const isExpanded = content.style.maxHeight && content.style.maxHeight !== '0px';
-
-            if (isExpanded) {
-                // Collapse
-                content.style.maxHeight = '0px';
-                icon.style.transform = 'rotate(0deg)';
-                card.classList.remove('shadow-2xl');
-                card.classList.add('shadow-md');
-            } else {
-                // Collapse all other expanded cards in the same container for clean UX
-                card.parentElement.querySelectorAll('.publication-card').forEach(otherCard => {
-                    if (otherCard !== card) {
-                        const otherContent = otherCard.querySelector('.collapsible-content');
-                        const otherIcon = otherCard.querySelector('[data-lucide="chevron-down"]');
-                        otherContent.style.maxHeight = '0px';
-                        otherIcon.style.transform = 'rotate(0deg)';
-                        otherCard.classList.remove('shadow-2xl');
-                        otherCard.classList.add('shadow-md');
-                    }
-                });
-
-                // Expand the clicked card
-                content.style.maxHeight = content.scrollHeight + 'px';
-                icon.style.transform = 'rotate(180deg)';
-                card.classList.add('shadow-2xl');
-                card.classList.remove('shadow-md');
-            }
-        };
-
-        // 3. Back-to-Top Button & Smooth Scroll
-        const backToTopButton = document.getElementById('back-to-top');
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTopButton.classList.remove('opacity-0');
-            } else {
-                backToTopButton.classList.add('opacity-0');
-            }
-        });
-
-        backToTopButton.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-
-        // 4. Initial Research Card Rendering
-        function renderResearchCard(icon, enTitle, zhTitle, enDetail, zhDetail) {
-            return `
-                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-corporate-accent/70">
-                    <div class="flex items-center justify-between mb-4 cursor-pointer" onclick="toggleCard(this)">
-                        <div class="flex items-center">
-                            <i data-lucide="${icon}" class="w-8 h-8 text-corporate-accent mr-4"></i>
-                            <h3 class="text-xl font-semibold text-ntust-blue" data-lang-en="${enTitle}" data-lang-zh="${zhTitle}">${zhTitle}</h3>
-                        </div>
-                        <i data-lucide="chevron-down" class="w-6 h-6 text-corporate-accent transition-transform duration-300"></i>
-                    </div>
-                    <div class="collapsible-content mt-4 overflow-hidden max-h-0 transition-all duration-500 ease-in-out">
-                        <p class="text-gray-600 border-t pt-4" data-lang-en="${enDetail}" data-lang-zh="${zhDetail}">${zhDetail}</p>
-                    </div>
-                </div>
-            `;
-        }
-        
-        const researchThemes = [
-            ['users', 'Digital Literacy & Social Media', '數位素養與社群媒體', 'Investigating the critical role of digital literacy, internet epistemic belief, and ethical engagement in social media environments.', '探討數位素養、網路認知信念和倫理參與在社群媒體環境中的關鍵作用。'],
-            ['bot', 'AI for Education', '人工智慧於教育的應用', 'Designing and evaluating AI-supported language learning, content creation, and personalized learning pathways in K-12 and higher education.', '設計與評估人工智慧輔助的語言學習、內容創作以及在基礎和高等教育中的個性化學習路徑。'],
-            ['film', 'Interactive Learning & Storytelling', '互動學習與敘事', 'Utilizing tools like Scratch and digital media to enhance learning through interactive storytelling and creative animation projects.', '運用 Scratch 和數位媒體等工具，透過互動敘事和創意動畫專案來增強學習效果。'],
-            ['globe', 'Digital Cultural Exchange', '數位文化交流', 'Developing curricula and platforms for intercultural learning, social-emotional skill development, and cross-border academic collaboration.', '開發用於跨文化學習、社交情緒技能發展和跨國學術合作的課程與平台。'],
-            ['layers', 'Cross-disciplinary Learning', '跨領域學習', 'Fostering integrated knowledge application through projects that bridge technology, humanities, and social sciences.', '透過結合技術、人文和社會科學的專案，促進整合知識的應用。'],
-            ['venus', 'Gender Studies in Education', '教育中的性別研究', 'Researching gender representation, equity, and identity issues within educational policy and classroom practice.', '研究教育政策和課堂實踐中的性別代表性、公平性和身份認同議題。'],
-            ['vr', 'STREAM Education (VR/AR)', 'STREAM教育（VR/AR）', 'Applying Virtual and Augmented Reality to Science, Technology, Reading, Engineering, Arts, and Mathematics (STREAM) education for immersive experiences.', '應用虛擬實境和擴增實境於 STREAM 教育，創造沉浸式學習體驗。'],
-            ['award', 'SDGs in Curriculum Design', '永續發展目標（SDGs）課程設計', 'Integrating United Nations Sustainable Development Goals into curriculum to promote global citizenship and problem-solving skills.', '將聯合國永續發展目標整合到課程中，以培養全球公民意識和解決問題的能力。'],
+        const collaborationData = [
+            { country: 'Kenya', icon: 'globe', img: 'https://placehold.co/600x400/004B87/FFFFFF?text=Kenya+Service', en: 'Study-Buddy project for SDG Quality Education exchange.', zh: '推動優質教育的數位學伴服務計畫。', detailEn: 'Mentored international service learning teams to provide digital companionship and quality education support for rural learners.', detailZh: '指導國際服務學習團隊，為偏鄉學習者提供數位伴讀與優質教育支持。' },
+            { country: 'Germany', icon: 'navigation', img: 'https://placehold.co/600x400/0ea5e9/FFFFFF?text=Germany+Academic', en: 'Academic visits & international team exchange programs.', zh: '國際學術團隊交流與教育研究訪問。', detailEn: 'Facilitated cross-border research collaborations and academic visits focusing on digital storytelling and interactive learning.', detailZh: '促進跨國研究合作與學術訪問，重點在於數位說故事與互動式學習。' },
+            { country: 'Japan', icon: 'map-pin', img: 'https://placehold.co/600x400/004B87/FFFFFF?text=Japan+Collab', en: 'Collaboration with major universities on SLC.', zh: '與日本頂尖大學合作，建立學習共同體。', detailEn: 'Participated in School as Learning Community (SLC) conferences and research exchanges with Nagoya and Tokyo University.', detailZh: '參與「學習共同體」(SLC) 研討會，並與名古屋大學及東京大學進行研究交流。' },
+            { country: 'Vietnam', icon: 'award', img: 'https://placehold.co/600x400/0ea5e9/FFFFFF?text=Vietnam+Intern', en: 'Overseas internship & Ho Chi Minh City Taiwan school.', zh: '海外教育實習與胡志明市臺灣學校見習。', detailEn: 'Led teaching internship programs for pre-service teachers at the Ho Chi Minh City Taiwan School.', detailZh: '帶領師資生於胡志明市臺灣學校進行海外教育實習計畫。' },
+            { country: 'Philippines', icon: 'users', img: 'https://placehold.co/600x400/004B87/FFFFFF?text=Philippines+Project', en: 'Engineering Drawing & vocational gamification research.', zh: '工程製圖與技職教育遊戲化研究。', detailEn: 'Collaborated on research regarding teamwork competency and gamified learning outcomes in vocational contexts.', detailZh: '合作研究技職背景下的團隊合作能力與遊戲化學習成效。' },
+            { country: 'USA', icon: 'landmark', img: 'https://placehold.co/600x400/004B87/FFFFFF?text=USA+Academic', en: 'Doctoral training & International Symposia hosting.', zh: '博士研究訓練與國際研討會舉辦。', detailEn: 'Ph.D. and MPA training at USC; hosting Global Education Conferences with Riverside and other US institutions.', detailZh: '於南加大進行博士與碩士訓練；並與河濱分校等美國機構合辦全球教育研討會。' }
         ];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('research-focus').querySelector('.grid');
-            container.innerHTML = ''; // Clear temporary content to re-render
-            researchThemes.forEach(theme => {
-                container.innerHTML += renderResearchCard(...theme);
+        const researchData = [
+            ['users', 'Social Media & Literacy', '社群媒體與數位素養', 'Exploring social media engagement, information sharing, and internet epistemic beliefs.', '探討社群媒體參與、資訊分享及網路認知信念。'],
+            ['bot', 'AI & Emerging Tech', '人工智慧與新興科技', 'Generative AI for writing support, language learning, and empathetic communication.', '生成式 AI 輔助寫作、語言學習與同理心溝通。'],
+            ['book-open', 'Digital Reading & E-books', '數位閱讀與電子書', 'Interactive e-books and storytelling for cognitive development and vocational education.', '互動式電子繪本、數位說故事與數位閱讀推動認知成長。'],
+            ['globe', 'Global Service Learning', '國際服務與交流', 'Digital cultural exchange and international service learning pedagogy for pre-service teachers.', '透過數位文化交流與國際服務學習提升準教師之跨文化能力。'],
+            ['layers', 'STREAM & Immersive Ed', 'STREAM 與沉浸式教育', 'Evaluating Immersive VR-based approaches in science, technology, engineering, and math learning.', '評估沉浸式虛擬實境於 STREAM 跨領域教育之教學成效。'],
+            ['heart', 'Life & Gender Education', '生命與性別教育', 'Promoting well-being, character development, and gender equality in educational practice.', '於教育實務中推動健康與福祉、品德發展及性別平等教育。']
+        ];
+
+        const projectData = [
+            { en: 'MOE: Life Education Community & Curriculum (2023-24)', zh: '教育部生命教育教學社群與課程發展實施計畫 (2023-24)', tag: 'MOE' },
+            { en: 'MOE: Character Education Promotion (2021-22)', zh: '教育部品德教育推廣與深耕學校計畫 (2021-22)', tag: 'MOE' },
+            { en: 'USR: iVillageplus Urban-Rural Engagement (2020-22)', zh: '社會責任實踐計畫 - iVillageplus 城鄉牽手深化計畫 (2020-22)', tag: 'USR' },
+            { en: 'MOE: Issue-oriented Cross-disciplinary Narrative Literacy (2019-22)', zh: '教育部議題導向跨領域敘事力培育計畫 (2019-22)', tag: 'MOE' },
+            { en: 'MOE: High-Ed Deep Plowing Lab (2020)', zh: '教育部高教深耕計畫: 遠距數位健康照護學習平台實驗室 (2020)', tag: 'MOE' },
+            { en: 'MOE: VR/AR Teaching Application教材開發 (2019-20)', zh: '教育部虛擬實境暨擴增實境教學應用教材開發計畫 (2019-20)', tag: 'MOE' },
+            { en: 'MOE: Digital Companion 107 (2018)', zh: '107 數位學伴 - 公益夥伴大學計畫 (2018)', tag: 'MOE' },
+            { en: 'USR: iVillage Project (2017-19)', zh: '社會責任實踐計畫 - iVillage 城鄉牽手計畫 (2017-19)', tag: 'USR' },
+            { en: 'MOE: Vietnam Ho Chi Minh City Taiwan School Internship (2017-18)', zh: '越南胡志明市臺灣學校教學見習計畫 (2017-18)', tag: 'MOE' },
+            { en: 'MOE: Teaching Innovation先導計畫 (2017-18)', zh: '教育部技專校院教學創新先導計畫 (2017-18)', tag: 'MOE' },
+            { en: 'MOE: Schweitzer Spiritual Service (2017-20)', zh: '實踐史懷哲精神教育服務計畫 (2017-20)', tag: 'MOE' },
+            { en: 'NSTC: Handheld Tangrams E-books (2016-18)', zh: '科技部手持式七巧板電子繪本之發展與評估 (2016-18)', tag: 'NSTC' },
+            { en: 'NSTC: Adult Women Online Learning (2012-14)', zh: '科技部中高齡女性成人網路學習互動歷程 (2012-14)', tag: 'NSTC' },
+            { en: 'NSTC: Math E-book App R&D (2012-14)', zh: '科技部手持式數學互動電子繪本 App 之研發與評估 (2012-14)', tag: 'NSTC' }
+        ];
+
+        // DETAILED RESEARCH RECORD
+        const journalPublications = [
+            { year: '2025', en: 'Astatke, M., Weng, C., & Yohannes, A. (2025). What is the role of immersive virtual reality (IVR) in the development of creativity skills and engagement among students in STREAM-based learning?', zh: 'Astatke, M., 翁楊絲茜, 等 (2025)。沉浸式虛擬實境 (IVR) 於 STREAM 學習中對學生創造力與參與度之影響。', journal: 'Education and Information Technologies (SSCI)' },
+            { year: '2025', en: 'Weng, C., & Wirda, M. A. (2025). The effect of student\'s online learning readiness to student\'s engagement, satisfaction and achievement in higher education, Indonesia.', zh: '翁楊絲茜, & Wirda, M. A. (2025)。印尼高等教育中線上學習準備度對參與度與成就之影響。', journal: 'Education and Information Technologies (SSCI)' },
+            { year: '2025', en: 'Puspitasari, D., Weng, C. T. Y., et al. (2025). Modeling the relationship between internet epistemic belief, digital literacy and social media engagement.', zh: 'Puspitasari, D., 翁楊絲茜, 等 (2025)。建立網路認知信念、數位素養與社群媒體參與之關聯模型。', journal: 'Interactive Learning Environments (SSCI)' },
+            { year: '2025', en: 'Lim, H., Lee, T. J., Weng, C., & Lee, S. M. (2025). Effects of surface acting on exhaustion of Korean school counselors.', zh: 'Lim, H., 等 (2025)。表面行為對韓國學校輔導員倦怠之影響。', journal: 'Journal of Counseling and Development (SSCI)' },
+            { year: '2024', en: 'Weng, C., Kassaw Kimanzi, K., Tsai, P. S., & Lee, T. J. (2024). Does scratch animation for SDGs with AI-comics impact on student empathy and self-efficacy?', zh: '翁楊絲茜, Kassaw Kimanzi, K., 等 (2024)。結合 AI 漫畫之 Scratch SDGs 動畫對學生同理心與自我效能之影響。', journal: 'Education and Information Technologies (SSCI)' },
+            { year: '2024', en: 'Astatke, M., Weng, C., et al. (2024). Influences of immersive virtual reality (IVR)-based STREAM instructional approach on students’ learning performances.', zh: 'Astatke, M., 翁楊絲茜, 等 (2024)。沉浸式虛擬實境 STREAM 教學法對學生學習成效之影響。', journal: 'ETR&D (SSCI)' },
+            { year: '2022', en: 'Nicholas O. Awuor, Cathy Weng, et al. (2022). Teamwork competency and satisfaction in online group project-based engineering course.', zh: 'Nicholas O. Awuor, 翁楊絲茜, 等 (2022)。線上專題式工程課程之團隊合作能力與滿意度研究。', journal: 'Computers & Education (SSCI)' },
+            { year: '2021', en: 'Weng, C., Puspitasari, D., et al. (2021). Reflective Learning an Important Key to the Success of Online Course Program.', zh: '翁楊絲茜, 等 (2021)。反思性學習：線上課程計畫成功的關鍵。', journal: 'Behaviour & Information Technology (SSCI)' },
+            { year: '2018', en: 'Weng, C., Otanga, S., et al. (2018). Effects of interactivity in E-textbooks on 7th graders science learning and cognitive load.', zh: '翁楊絲茜, 等 (2018)。電子教科書互動性對七年級學生科學學習與認知負荷之影響。', journal: 'Computers & Education (SSCI)' },
+            { year: '2015', en: 'Weng, C., Tsai, C-C., Weng, A. (2015). Social support as a neglected e-learning motivator affecting trainee’s decisions.', zh: '翁楊絲茜, 等 (2015)。社會支持作為影響受訓者持續使用意願的電子學習動機。', journal: 'AJET (SSCI)' }
+        ];
+
+        const conferencePresentations = [
+            { year: '2025', place: 'International Academic Venue', en: 'Upcoming Research: Integrating AI-enabled Social Emotional Learning (SEL) in Higher Education.', zh: '即將發表：人工智慧賦能之社會情緒學習 (SEL) 於高等教育之整合研究。' },
+            { year: '2024', place: 'Taipei, Taiwan', en: 'Influences of immersive virtual reality (IVR)-based science, technology, religion, engineering, art, and mathematics (STREAM) instructional approach.', zh: '沉浸式虛擬實境 (IVR) 基於 STREAM 跨領域教學法對學生學習表現之影響。' },
+            { year: '2023', place: 'Nagoya, Japan', en: 'ICEEL: The Effect of Integrating a Board Game into English Teaching on English Learning Conceptions of Sixth Graders.', zh: 'ICEEL：將桌遊融入英語教學對六年級學生英語學習概念之影響。' },
+            { year: '2023', place: 'Nagoya, Japan', en: 'ICEEL: The Impacts of Design Thinking in APP Programming Course on Students\' Communication and Coordination Ability.', zh: 'ICEEL：設計思考融入 APP 程式設計課程對學生溝通與協調能力之影響。' },
+            { year: '2022', place: 'Tokyo, Japan', en: 'SLC: The 8th International Conference Of School As Learning Community at Tokyo University.', zh: 'SLC：第八屆學習共同體國際研討會 (東京大學)。' },
+            { year: '2022', place: 'Bangkok, Thailand', en: 'Thailand TESOL: Examining structural relationships between university students’ motivational beliefs and online self-regulated English learning.', zh: '泰國 TESOL：檢驗大學生動機信念與線上自主英語學習之結構關係。' },
+            { year: '2021', place: 'Riverside, CA, USA', en: 'Global Education Conf: The Effects of Project-based Digital Camp on Student\'s Self-Regulated Learning.', zh: '全球教育研討會：專題式數位營隊對偏鄉學生自主學習之影響。' },
+            { year: '2019', place: 'Osaka, Japan', en: 'ICLEHI: The Motivation of Information Sharing on Line for the Middle aged and Elderly.', zh: 'ICLEHI：中高齡者 Line 資訊分享動機研究。' },
+            { year: '2018', place: 'Oxford University, UK', en: 'Oxford Education Symposium: Impacts of Communication Skills on Learners in Project-Based Digital Storytelling.', zh: '牛津教育對談：溝通技巧對專題式數位說故事學習者之影響。' },
+            { year: '2015', place: 'Kobe, Japan', en: 'ACTC: Effects of an Interactive E-Storybook on Young Children’s Reading Comprehension.', zh: 'ACTC：互動式電子繪本對幼兒閱讀理解之影響。' }
+        ];
+
+        // ADDED MISSING NAMES IN SELECTED PRESENTATIONS
+        const selectedPresentations = [
+            { year: '2025', en: 'Upcoming Milestone: AI-enabled Social Emotional Learning (SEL) Pedagogy.', zh: '2025 重點發表：人工智慧賦能之社會情緒學習 (SEL) 教學法。', place: 'International Academic Venues', highlight: 'Most Recent', names: 'Weng, C., & Research Team' },
+            { year: '2024', en: 'Scratch Animation for SDGs with AI-comics: Impact on Empathy and Self-efficacy.', zh: '2024 亮點：結合 AI 漫畫之 Scratch SDGs 動畫教學對學生同理心之影響。', place: 'SSCI Journal Highlight', highlight: 'High Impact', names: 'Weng, C., Kassaw Kimanzi, K., Tsai, P. S., & Lee, T. J.' },
+            { year: '2013', en: 'HCI International: The Development of Interactive Book Apps to Teach Mathematical Concepts.', zh: 'HCI International：開發互動式 App 以教導幼兒數學概念之成效。', place: 'Las Vegas, USA', highlight: 'Classic Record', names: 'Weng, C., & Weng, A.' },
+            { year: '2013', en: 'TELDAP: Social Media for Teaching English Vocabulary: A Case Study on Facebook.', zh: 'TELDAP：運用社群媒體進行英語詞彙教學之個案研究。', place: 'Hsinchu, Taiwan', highlight: 'Case Study', names: 'Weng, C., Liao, Y. R., & Weng, A.' },
+            { year: '2013', en: 'TWELF: Lego Robotics Engagement in Programming Curriculum成效評估。', zh: 'TWELF：應用樂高機器人對於程式設計學習之課程成效評估。', place: 'Taichung, Taiwan', highlight: 'Innovation', names: '王湄雁、翁楊絲茜、夏至賢' },
+            { year: '2013', en: 'TEFL: Vocabulary Learning Strategies and Achievement among Junior High Students.', zh: 'TEFL：台灣國中生詞彙學習策略與成就之研究。', place: 'Taipei, Taiwan', highlight: 'Linguistics', names: 'Chang, M., Weng, C., & Zakharova, A.' }
+        ];
+
+        const journeyData = [
+            { date: '2021 - Pres', en: 'Head of Public Relations, Secretariate, NTUST', zh: '國立臺灣科技大學 秘書室公關組 組長', hl: true, icon: 'megaphone' },
+            { date: '2020 - Pres', en: 'Professor, GIDLE / Teacher Education Center, NTUST', zh: '數位學習與教育研究所 / 師資培育中心 教授', hl: false, icon: 'graduation-cap' },
+            { date: '2016 - 2018', en: 'Director & Chair, GIDLE / Teacher Education Center, NTUST', zh: '數位學習與教育研究所 所長兼主任', hl: true, icon: 'users' },
+            { date: '2009 - 2016', en: 'Director, Center of Gender Studies, NTUST', zh: '性別研究中心 主任', hl: true, icon: 'heart' },
+            { date: '2002 - 2015', en: 'Assistant Professor, NTUST', zh: '數位學習與教育研究所 助理教授', hl: false, icon: 'book' }
+        ];
+
+        function render() {
+            // Collaboration Grid
+            document.getElementById('collab-grid').innerHTML = collaborationData.map(c => `
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 group transition-all hover:shadow-2xl">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${c.img}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="${c.country}">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full flex items-center shadow-sm">
+                            <i data-lucide="${c.icon}" class="w-4 h-4 text-ntust-blue mr-2"></i>
+                            <span class="text-xs font-black uppercase text-ntust-blue">${c.country}</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-lg font-bold text-ntust-blue mb-2" data-lang-en="${c.en}" data-lang-zh="${c.zh}"></h4>
+                        <p class="text-xs text-gray-600 leading-relaxed italic" data-lang-en="${c.detailEn}" data-lang-zh="${c.detailZh}"></p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Research Grid
+            document.getElementById('research-grid').innerHTML = researchData.map((d, idx) => `
+                <div class="theme-card bg-white p-6 rounded-xl shadow border-l-4 border-accent hover:shadow-lg transition-all cursor-pointer group" onclick="toggleTheme(${idx})">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center">
+                            <i data-lucide="${d[0]}" class="w-6 h-6 text-accent mr-3 group-hover:scale-110 transition-transform"></i>
+                            <h3 class="font-bold text-ntust-blue text-sm md:text-base" data-lang-en="${d[1]}" data-lang-zh="${d[2]}"></h3>
+                        </div>
+                        <i data-lucide="chevron-down" class="chevron-icon w-4 h-4 text-gray-400"></i>
+                    </div>
+                    <div id="theme-desc-${idx}" class="theme-card-desc">
+                        <p class="text-xs md:text-sm text-gray-600 leading-relaxed pt-2 border-t border-gray-100" data-lang-en="${d[3]}" data-lang-zh="${d[4]}"></p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Projects Archive
+            document.getElementById('projects-list').innerHTML = projectData.map(p => `
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-start space-x-3">
+                    <div class="bg-blue-50 p-2 rounded text-ntust-blue shrink-0"><i data-lucide="check-circle" class="w-4 h-4"></i></div>
+                    <div>
+                        <span class="text-[10px] font-bold text-corporate-accent uppercase tracking-tighter">${p.tag}</span>
+                        <p class="text-[11px] font-bold text-gray-800 leading-tight" data-lang-en="${p.en}" data-lang-zh="${p.zh}"></p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Publications Render
+            document.getElementById('pub-list').innerHTML = journalPublications.map(p => `
+                <div class="bg-white p-6 rounded-xl shadow border-l-4 border-ntust-blue relative hover:shadow-md transition-shadow group">
+                    <div class="absolute top-0 right-0 p-2 bg-gray-50 text-[10px] font-black text-gray-300">${p.year}</div>
+                    <p class="text-gray-800 leading-relaxed mb-1 text-sm md:text-base font-medium pr-12" data-lang-en="${p.en}" data-lang-zh="${p.zh}"></p>
+                    <p class="text-xs text-corporate-accent font-bold italic">${p.journal}</p>
+                </div>
+            `).join('');
+
+            // Conferences Render
+            document.getElementById('conf-list').innerHTML = conferencePresentations.map(c => `
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-50 flex flex-col md:flex-row md:items-center justify-between gap-2 hover:shadow-md transition-shadow">
+                    <div class="md:w-32 shrink-0"><span class="text-xs font-black text-gray-400">${c.year}</span></div>
+                    <div class="flex-grow pr-4 text-xs font-bold text-gray-700" data-lang-en="${c.en}" data-lang-zh="${c.zh}"></div>
+                    <div class="md:w-40 text-right"><span class="text-[10px] px-2 py-1 bg-blue-50 rounded text-ntust-blue font-black uppercase tracking-tight">${c.place}</span></div>
+                </div>
+            `).join('');
+
+            // Selected Presentations Render (WITH NAMES)
+            document.getElementById('selected-pres-list').innerHTML = selectedPresentations.map(s => `
+                <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-accent hover:scale-105 transition-transform">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="bg-accent/10 text-accent px-3 py-1 rounded-full text-[10px] font-black uppercase">${s.highlight}</span>
+                        <span class="text-gray-300 font-black text-lg">${s.year}</span>
+                    </div>
+                    <p class="text-xs text-ntust-blue/60 font-bold mb-1 italic uppercase tracking-wider">${s.names}</p>
+                    <h4 class="text-ntust-blue font-bold text-sm mb-3 leading-snug" data-lang-en="${s.en}" data-lang-zh="${s.zh}"></h4>
+                    <p class="text-[10px] text-gray-400 uppercase tracking-widest flex items-center">
+                        <i data-lucide="map-pin" class="w-3 h-3 inline mr-1"></i> ${s.place}
+                    </p>
+                </div>
+            `).join('');
+
+            // Journey Render
+            document.getElementById('journey-list').innerHTML = journeyData.map(j => `
+                <div class="timeline-item relative">
+                    <div class="timeline-item-icon w-10 h-10 rounded-full border-4 flex items-center justify-center ${j.hl ? 'border-accent bg-blue-50' : 'border-gray-200 bg-white'} shadow-sm">
+                        <i data-lucide="${j.icon}" class="w-4 h-4 ${j.hl ? 'text-accent' : 'text-gray-400'}"></i>
+                    </div>
+                    <div class="timeline-item-content bg-white p-6 rounded-xl shadow-md border-t-4 ${j.hl ? 'border-accent' : 'border-ntust-blue'} ml-10 md:ml-0">
+                        <span class="text-xs font-black text-gray-400 block mb-1 uppercase">${j.date}</span>
+                        <h4 class="text-xs md:text-sm font-bold text-ntust-blue leading-tight" data-lang-en="${j.en}" data-lang-zh="${j.zh}"></h4>
+                    </div>
+                </div>
+            `).join('');
+
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+            updateLang();
+        }
+
+        window.toggleTheme = function(index) {
+            const cards = document.querySelectorAll('.theme-card');
+            cards.forEach((card, i) => {
+                if (i === index) { card.classList.toggle('active'); } else { card.classList.remove('active'); }
             });
-            // Re-render lucide icons after injecting content
-            if (typeof createIcons !== 'undefined') createIcons({ icons });
-            updateContent(); // Initial content update
+        }
+
+        document.getElementById('btn-journals').addEventListener('click', () => {
+            document.getElementById('pub-list').classList.remove('hidden');
+            document.getElementById('conf-list').classList.add('hidden');
+            document.getElementById('btn-journals').className = 'px-6 py-2 rounded-md bg-ntust-blue text-white text-xs font-bold transition-all shadow-md';
+            document.getElementById('btn-conferences').className = 'px-6 py-2 rounded-md text-gray-500 hover:text-ntust-blue text-xs font-bold transition-all';
         });
+
+        document.getElementById('btn-conferences').addEventListener('click', () => {
+            document.getElementById('pub-list').classList.add('hidden');
+            document.getElementById('conf-list').classList.remove('hidden');
+            document.getElementById('btn-conferences').className = 'px-6 py-2 rounded-md bg-ntust-blue text-white text-xs font-bold transition-all shadow-md';
+            document.getElementById('btn-journals').className = 'px-6 py-2 rounded-md text-gray-500 hover:text-ntust-blue text-xs font-bold transition-all';
+        });
+
+        function updateLang() {
+            const isEn = currentLang === 'en';
+            document.querySelectorAll('[data-lang-en], [data-lang-zh]').forEach(el => {
+                const text = isEn ? el.getAttribute('data-lang-en') : el.getAttribute('data-lang-zh');
+                if (text) el.textContent = text;
+            });
+            document.getElementById('lang-toggle').textContent = isEn ? '繁體中文' : 'English';
+            document.body.className = isEn ? 'font-english' : 'font-chinese';
+        }
+
+        document.getElementById('lang-toggle').addEventListener('click', () => { currentLang = currentLang === 'en' ? 'zh' : 'en'; updateLang(); });
+        window.addEventListener('scroll', () => { document.getElementById('back-to-top').style.opacity = window.scrollY > 500 ? '1' : '0'; });
+        document.getElementById('back-to-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        document.addEventListener('DOMContentLoaded', render);
     </script>
 </body>
 </html>
